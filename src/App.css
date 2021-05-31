@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.MuiCardContent-root{
+  padding-bottom: 0px !important;
+}
+.MuiSelect-icon{
+  color: white!important;
+}
