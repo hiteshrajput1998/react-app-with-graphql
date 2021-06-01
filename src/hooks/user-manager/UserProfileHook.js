@@ -4,7 +4,12 @@ import { getUser } from '../../api/user-api/UserAPI';
 export const useUserProfileRetriver = (actions) => {
     console.log(`useUserProfileHook: ${actions}`);
 
+    
     const [userProfile, setUserProfile] = useState([]);
+
+    useEffect(() => {
+        getUserData("60b5d716d60175344015cc04");
+    }, []);
 
     const getUserData = id => {
         getUser(id, result => {

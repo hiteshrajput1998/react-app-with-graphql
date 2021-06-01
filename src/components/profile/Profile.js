@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Button, Card, CardActionArea, CardContent, CardHeader, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, makeStyles, Typography } from '@material-ui/core';
-import { useUserProfileRetriver } from '../../hooks/user-manager/UserProfileHook';
 import { useUserProfileContext } from '../../hooks/user-manager/UserProfileManagerContext';
+import ProfileImage from './prof2.png';
 
 
 const useStyles = makeStyles((theme) => ({
     card: {
-        maxWidth: 345,
+        maxWidth: 280,
         backgroundColor: 'whitesmoke'
     },
     media: {
-        width: '75%',
+        width: '100%',
         objectFit: 'cover',
     },
     avatar: {
@@ -19,31 +19,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Profile(props) {
-
     const classes = useStyles();
 
-
     const { userProfile, getUserData } = useUserProfileContext();
-    console.log(`GetUser: ${JSON.stringify(userProfile)}`);
+    // if (!props) {
+    //     getUserData("60b5d716d60175344015cc04");
+    // }
 
     const [open, setOpen] = useState(true);
     const [scoll, setScroll] = useState("paper");
-    const [profile, setProfile] = useState();
+    const [profile, setProfile] = useState({});
 
     useEffect(() => {
         if (userProfile) {
             console.log(`userProfile: ${JSON.stringify(userProfile)}`);
-            //setProfile(data.userProfile.data.getUser);
+
+            let userd = userProfile.data?.getUser;
+            setProfile(userd);
         }
     }, [userProfile]);
 
-    const handleClickOpen = scroll => () => {
-        setOpen(true);
-    };
-
     const handleClose = () => {
         setOpen(false);
+        props.history.push('/dashboard');
     };
+
     return (
         <>
             <Dialog
@@ -56,33 +56,33 @@ function Profile(props) {
                 <DialogContent>
                     <DialogContentText></DialogContentText>
                     <Card className={classes.card}>
-                        <CardHeader
-                            avatar={
-                                <Avatar aria-label="Recipe" className={classes.avatar}>
-                                    R
-                                </Avatar>
-                            }
-                            title="HR"
-                            subheader="September 14, 2016"
-                        />
                         <CardActionArea>
                             <CardMedia
                                 component="img"
-                                alt="Contemplative Reptile"
                                 className={classes.media}
-                                height="140"
-                                image="./logo192.png"
-                                title="Contemplative Reptile"
+                                height="200"
+                                image={ProfileImage}
                             />
                             <CardContent>
-                                <Typography gutterBottom variant="h5" component="h2">
-                                    Profile
+                                <CardHeader
+                                    style={{padding: "10px 0px 10px 0px"}}
+                                    avatar={
+                                        <Avatar aria-label="Recipe" className={classes.avatar}>
+                                            {String(profile?.firstName).charAt(0) + String(profile?.lastName).charAt(0)}
+                                        </Avatar>
+                                    }
+                                    title={<Typography gutterBottom variant="h5" component="h2">
+                                            {profile?.firstName + "    " + profile?.lastName}
+                                        </Typography>}
+                                    subheader={<Typography component="h6">
+                                                Software Engineer
+                                            </Typography>}
+                                />
+                                <Typography component="h6">
+                                    {profile?.email}
                                 </Typography>
-                                <Typography component="p">
-                                    Hitesh Rajput
-                                </Typography>
-                                <Typography component="p">
-                                    hitesh@gmail.com
+                                <Typography component="h6">
+                                    {profile?.created}
                                 </Typography>
                             </CardContent>
                         </CardActionArea>

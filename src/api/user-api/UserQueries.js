@@ -19,6 +19,8 @@ export const GET_USER_SCHEMA = gql`
             userName
             email
             created
+            firstName
+            lastName
         }
     }
 `;

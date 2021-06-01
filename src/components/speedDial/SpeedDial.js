@@ -4,10 +4,10 @@ import { Backdrop, makeStyles } from '@material-ui/core';
 import { SpeedDial, SpeedDialAction } from '@material-ui/lab';
 import HomeIcon from '@material-ui/icons/Home';
 import ImageIcon from '@material-ui/icons/Image';
-import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import PermContactCalendarIcon from '@material-ui/icons/PermContactCalendar';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Profile from '../profile/Profile';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,6 +24,7 @@ function SpeedDIal(props) {
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [profileToggle, setProfileToggle] = React.useState(false);
 
     const actions = [
         { icon: <HomeIcon />, name: 'Home' },
@@ -51,8 +52,8 @@ function SpeedDIal(props) {
             case "Image":
 
                 break;
-            case "Video":
-
+            case "Profile":
+                props.history.push('/profile');
                 break;
             case "ContactUs":
 
@@ -88,6 +89,7 @@ function SpeedDIal(props) {
                     />
                 ))}
             </SpeedDial>
+            { profileToggle ? <Profile active={profileToggle}  /> : ""}
         </div>
     );
 }
