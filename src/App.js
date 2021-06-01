@@ -59,9 +59,9 @@ function App(props) {
                 Logout due to user inactivity!
               </Alert>
             </div>
-        <Routes />
+        
         */}
-          <Profile />
+          <Routes />
         </main>
         <SpeedDIal />
         <Footer />

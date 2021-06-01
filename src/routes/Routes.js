@@ -5,6 +5,7 @@ import CreateUpdateCollege from '../components/forms/create-update-college/Creat
 import LoginForm from "../components/forms/signin/LoginForm";
 import SignUpForm from '../components/forms/signup/SignUpForm';
 import NotFound from '../components/not-found/NotFound';
+import Profile from '../components/profile/Profile';
 
 const Routes = () => {
     return (
@@ -15,6 +16,7 @@ const Routes = () => {
             <Route path='/dashboard' component={Dashboard} />
             <Route path='/createCollege' exact  component={CreateUpdateCollege} />
             <Route path='/updateCollege/:id' component={CreateUpdateCollege} /> 
+            <Route path="/profile" component={Profile} />
             <Route path="*" component={NotFound} />
         </Switch>
     )
