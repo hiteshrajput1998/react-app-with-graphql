@@ -1,26 +1,22 @@
 import gql from 'graphql-tag';
-
+import { CORE_USER_FIELDS } from '../fragments/Fragments';
 
 export const GET_USERS_SCHEMA = gql`
+    ${CORE_USER_FIELDS}
     query GetUsers{
         getUsers{
             id
-            userName
-            email
-            created
+            ...CoreUserFields
         }
     }
 `;
 
 export const GET_USER_SCHEMA = gql`
+    ${CORE_USER_FIELDS}
     query GetUser($id: String!){
         getUser(id: $id){
             id
-            userName
-            email
-            created
-            firstName
-            lastName
+            ...CoreUserFields
         }
     }
 `;
