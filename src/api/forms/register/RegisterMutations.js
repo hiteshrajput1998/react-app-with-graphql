@@ -8,6 +8,9 @@ export const Register_RECORD = gql`
                 userName
                 email
                 created
+                firstName
+                lastName
+                id
             }
         }
     }

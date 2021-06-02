@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "70vh"
+        height: "62vh"
     },
     container: {
         // position: "absolute",
@@ -59,13 +59,17 @@ const SignUpForm = (props) => {
         userName: '',
         password: '',
         email: '',
-        created: ''
+        created: '',
+        firstName: '',
+        lastName: ''
     });
 
     const [errors, setErrors] = useState({
         userName: '',
         password: '',
         email: '',
+        firstName: '',
+        lastName: '',
         other: ''
     });
 
@@ -188,6 +192,40 @@ const SignUpForm = (props) => {
                                 <Grid item xs={12}>
                                     <TextField
                                         fullWidth
+                                        label="firstName"
+                                        name="firstName"
+                                        size="small"
+                                        variant="outlined"
+                                        onChange={updateField}
+                                    />
+                                    {
+                                        errors.firstName &&
+                                        <Alert variant="outlined" severity="error">
+                                            {errors.firstName} — check it out!
+                                        </Alert>
+                                    }
+
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="LastName"
+                                        name="lastName"
+                                        size="small"
+                                        variant="outlined"
+                                        onChange={updateField}
+                                    />
+                                    {
+                                        errors.lastName &&
+                                        <Alert variant="outlined" severity="error">
+                                            {errors.lastName} — check it out!
+                                        </Alert>
+                                    }
+
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
                                         label="Password"
                                         name="password"
                                         size="small"
@@ -211,6 +249,7 @@ const SignUpForm = (props) => {
                         </Grid>
                     </Grid>
                 </form>
+                <ToastContainer autoClose={5000} />
             </Container>
         </div>
     );

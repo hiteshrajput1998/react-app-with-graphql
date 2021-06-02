@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 
 
 export const GET_USERS_SCHEMA = gql`
-    query GetColleges{
-        getcolleges{
+    query GetUsers{
+        getUsers{
             id
             userName
             email
