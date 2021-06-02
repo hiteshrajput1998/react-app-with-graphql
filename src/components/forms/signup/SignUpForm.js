@@ -76,7 +76,7 @@ const SignUpForm = (props) => {
     const [setMutationData] = useMutation(Register_RECORD, {
         onCompleted: (res) => {
             console.log(res);
-            toast.success('Registered successfully!');
+            toast.success('Registered successfully!!');
             //localStorage.setItem("AUTH_TOKEN", loginUser.token);
         },
         onError: ({ networkError, graphQLErrors }) => {
