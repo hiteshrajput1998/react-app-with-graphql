@@ -16,6 +16,7 @@ import { Alert } from '@material-ui/lab';
 import { CollegeMainContextProvider } from './providers/CollegeMainContext';
 import Profile from './components/profile/Profile';
 import { UserProfileContextProvider } from './hooks/user-manager/UserProfileManagerContext';
+import ErrorBoundary from './error-boundry/ErrorBoundry';
 // import { useQuery } from '@apollo/react-hooks';
 // import { graphql, compose } from 'react-apollo';
 // import { Provider } from 'react-redux';
@@ -49,10 +50,11 @@ function App(props) {
   return (
     <CollegeMainContextProvider>
       <UserProfileContextProvider>
-        <Header />
-        <LeftDrawer />
-        <main className={classes.content}>
-          {/*
+        <ErrorBoundary>
+          <Header />
+          <LeftDrawer />
+          <main className={classes.content}>
+            {/*
           timer > 0 ? <Routes /> :
             <div style={{ marginLeft: "20%" }}>
               <Alert variant="filled" severity="error">
@@ -61,10 +63,11 @@ function App(props) {
             </div>
         
         */}
-          <Routes />
-        </main>
-        <SpeedDIal />
-        <Footer />
+            <Routes />
+          </main>
+          <SpeedDIal />
+          <Footer />
+        </ErrorBoundary>
       </UserProfileContextProvider>
     </CollegeMainContextProvider>
 
