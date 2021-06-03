@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 import { useCollegesRetriver } from './CollegeManagerHook';
 
 export const CollegeContext = React.createContext({});
@@ -19,4 +20,8 @@ export const CollegeContextProvider = ({ children, actions }) => {
 
 export const useCollegeContext = () => {
     return useContext(CollegeContext);
+};
+
+CollegeContextProvider.propTypes = {
+    children: PropTypes.node.isRequired
 };
