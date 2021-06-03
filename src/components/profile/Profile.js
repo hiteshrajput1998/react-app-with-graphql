@@ -65,24 +65,24 @@ function Profile(props) {
                             />
                             <CardContent>
                                 <CardHeader
-                                    style={{padding: "10px 0px 10px 0px"}}
+                                    style={{ padding: "10px 0px 10px 0px" }}
                                     avatar={
                                         <Avatar aria-label="Recipe" className={classes.avatar}>
-                                            {String(profile?.firstName).charAt(0) + String(profile?.lastName).charAt(0)}
+                                            {String(profile?.firstName ?? "P").charAt(0) + String(profile?.lastName ?? "R").charAt(0)}
                                         </Avatar>
                                     }
                                     title={<Typography gutterBottom variant="h5" component="h2">
-                                            {profile?.firstName + "    " + profile?.lastName}
-                                        </Typography>}
+                                        {profile?.firstName ?? "Unknown"} {profile?.lastName ?? "Unknown"}
+                                    </Typography>}
                                     subheader={<Typography component="h6">
-                                                Software Engineer
+                                        Software Engineer
                                             </Typography>}
                                 />
                                 <Typography component="h6">
-                                    {profile?.email}
+                                    {profile?.email ?? "Unknown"}
                                 </Typography>
                                 <Typography component="h6">
-                                    {profile?.created}
+                                    {profile?.created ?? "Unknown"}
                                 </Typography>
                             </CardContent>
                         </CardActionArea>
