@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
 
 const useIdleTimer = (startTime) => {
     const [timer, setTimer] = useState(startTime);
@@ -30,3 +31,7 @@ const useIdleTimer = (startTime) => {
 };
 
 export default useIdleTimer;
+
+useIdleTimer.propTypes = {
+    startTime: PropTypes.number
+};
