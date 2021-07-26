@@ -20,3 +20,9 @@ export const GET_USER_SCHEMA = gql`
         }
     }
 `;
+
+export const CHECK_VERYFY_OTP_SCHEMA = gql`
+    query VerifyOTP($otp: String!, $email: String!){
+        verifyOTP(otp: $id, email: $email)
+    }
+`;

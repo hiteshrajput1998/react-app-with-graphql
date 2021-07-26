@@ -2,6 +2,7 @@
 import React from 'react';
 import Dashboard from './components/dashboard/Dashboard';
 import 'react-toastify/dist/ReactToastify.css';
+import { Offline, Online } from 'react-detect-offline';
 import './App.css';
 import CreateUpdateCollege from './components/forms/create-update-college/CreateUpdateCollege';
 import Header from './components/header/Header';
@@ -17,6 +18,7 @@ import { CollegeMainContextProvider } from './providers/CollegeMainContext';
 import Profile from './components/profile/Profile';
 import { UserProfileContextProvider } from './hooks/user-manager/UserProfileManagerContext';
 import ErrorBoundary from './error-boundry/ErrorBoundry';
+import InternetNotFound from './components/internet-not-found/InternetNotFound';
 // import { useQuery } from '@apollo/react-hooks';
 // import { graphql, compose } from 'react-apollo';
 // import { Provider } from 'react-redux';
@@ -48,13 +50,15 @@ function App(props) {
   //const timer = useIdleTimer(120);
 
   return (
-    <CollegeMainContextProvider>
-      <UserProfileContextProvider>
-        <ErrorBoundary>
-          <Header />
-          <LeftDrawer />
-          <main className={classes.content}>
-            {/*
+    <>
+      <Online>
+        <CollegeMainContextProvider>
+          <UserProfileContextProvider>
+            <ErrorBoundary>
+              <Header />
+              <LeftDrawer />
+              <main className={classes.content}>
+                {/*
           timer > 0 ? <Routes /> :
             <div style={{ marginLeft: "20%" }}>
               <Alert variant="filled" severity="error">
@@ -63,14 +67,19 @@ function App(props) {
             </div>
         
         */}
-            <Routes />
-          </main>
-          <SpeedDIal />
-          <Footer />
-        </ErrorBoundary>
-      </UserProfileContextProvider>
-    </CollegeMainContextProvider>
-
+                <Routes />
+              </main>
+              <SpeedDIal />
+              <Footer />
+            </ErrorBoundary>
+          </UserProfileContextProvider>
+        </CollegeMainContextProvider>
+        <InternetNotFound />
+      </Online>
+      <Offline>
+        <InternetNotFound />
+      </Offline>
+    </>
   );
 }
 

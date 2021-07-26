@@ -183,7 +183,6 @@ const Dashboard = (props) => {
     });
 
     const handleDeleteConfirmation = () => {
-        console.log(deleteParams);
 
         if (deleteParams?.id) {
             setMutationData({
@@ -261,7 +260,7 @@ const Dashboard = (props) => {
                             <div>
                                 <Button variant="contained" color="primary" startIcon={<DeleteIcon />} style={{ textTransform: "none" }} onClick={handlePurge}>
                                     Purge Records
-                        </Button>
+                                </Button>
                             </div>
                         </div>
                     )
@@ -283,7 +282,7 @@ const Dashboard = (props) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"Confirmation!"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         Are you sure want to delete college?

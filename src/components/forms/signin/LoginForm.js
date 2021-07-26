@@ -1,16 +1,18 @@
 import React from 'react';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Avatar, Button, Container, Grid } from '@material-ui/core';
+import { Avatar, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react';
 import CryptoJS from 'crypto-js';
-import { validateLoginForm } from '../../utils';
+import { validateLoginForm, validateOTPForm } from '../../utils';
 import { Login_RECORD } from '../../../api/forms/login/LoginMutations';
 import { ToastContainer, toast } from 'react-toastify';
+import { CHECK_VERYFY_OTP_SCHEMA } from '../../../api/user-api/UserQueries';
+import { RESEND_OTP_SCHEMA } from '../../../api/user-api/UserMutations';
 
 
 
@@ -61,11 +63,14 @@ const LoginForm = (props) => {
         userName: '',
         password: ''
     });
+    const [open, setOpen] = useState(false);
+    const [otp, setOtp] = useState();
 
     const [errors, setErrors] = useState({
         userName: '',
         password: '',
-        others: ''
+        others: '',
+        otp: ''
     });
 
     const [setMutationData] = useMutation(Login_RECORD, {
@@ -84,11 +89,46 @@ const LoginForm = (props) => {
         },
         onCompleted: ({ loginUser }) => {
             console.log(loginUser.token);
-            toast.success("Login successfully!");
-            //setTostify(true);
+            toast.success(loginUser.message);
             localStorage.setItem("AUTH_TOKEN", loginUser.token);
+            setOpen(true);
         }
     });
+
+    const [setResendOtp] = useMutation(RESEND_OTP_SCHEMA, {
+        onError: (error) => {
+            const { networkError, graphQLErrors } = error;
+            if (graphQLErrors) {
+                setErrors({ others: graphQLErrors.map(x => x.message)[0] })
+            }
+
+            if (networkError) {
+                console.log(networkError);
+                setErrors({ others: 'network error!' })
+            }
+            toast.error('Login failed!');
+        }
+    });
+
+    // const [VerifyOTP] = useMutation(CHECK_VERYFY_OTP_SCHEMA, {
+    //     onError: (error) => {
+    //         console.log(Object(JSON.stringify(error)));
+    //         const { networkError, graphQLErrors } = error;
+    //         if (graphQLErrors) {
+    //             setErrors({ others: graphQLErrors.map(x => x.message)[0] })
+    //         }
+
+    //         if (networkError) {
+    //             console.log(networkError);
+    //             setErrors({ others: 'network error!' })
+    //         }
+    //         toast.error('Login failed!');
+    //     },
+    //     onCompleted: ({ verifyOTP }) => {
+    //         console.log(verifyOTP);
+    //         toast.success(verifyOTP);
+    //     }
+    // });
 
     useEffect(() => {
         console.log('useEffect called');
@@ -100,6 +140,12 @@ const LoginForm = (props) => {
         console.log(validationErrors);
         setErrors(validationErrors);
     }, [data])
+
+    useEffect(() => {
+        const validationErrors = validateOTPForm(otp);
+        console.log(validationErrors);
+        setErrors(validationErrors);
+    }, [otp])
 
     const updateField = async e => {
         e.preventDefault();
@@ -130,6 +176,42 @@ const LoginForm = (props) => {
             },
         });
     }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleOTP = (e) => {
+        console.log(e.target.value);
+        setOtp(e.target.value)
+    };
+
+    const handleResendOtp = () => {
+        setResendOtp({
+            variables: {
+                email: this.stat
+            }
+        })
+    };
+
+    const handleOTPVerification = () => {
+        console.log(otp);
+
+        const validationErrors = validateOTPForm(otp);
+        console.log(validationErrors);
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        // VerifyOTP({
+        //     variables: {
+        //         otp: otp,
+        //         userName: data.userName
+        //     }
+        // });
+    };
 
 
     return (
@@ -197,6 +279,42 @@ const LoginForm = (props) => {
                 </form>
                 <ToastContainer autoClose={5000} />
             </Container>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"OTP verification !"}</DialogTitle>
+                <DialogContent>
+                    {
+                        errors.otp &&
+                        <Alert variant="outlined" severity="error">
+                            {errors.otp}!
+                        </Alert>
+                    }
+                    <TextField
+                        fullWidth
+                        label="OTP"
+                        name="otp"
+                        size="small"
+                        type="password"
+                        variant="outlined"
+                        onChange={handleOTP}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleResendOtp} color="primary">
+                        Resend otp
+                    </Button>
+                    <Button onClick={handleOTPVerification} color="primary" autoFocus>
+                        Next
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }
