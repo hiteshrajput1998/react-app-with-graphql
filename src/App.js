@@ -1,8 +1,7 @@
 // import gql from 'graphql-tag';
-import React from 'react';
+import React, { useState } from 'react';
 import Dashboard from './components/dashboard/Dashboard';
 import 'react-toastify/dist/ReactToastify.css';
-import { Offline, Online } from 'react-detect-offline';
 import './App.css';
 import CreateUpdateCollege from './components/forms/create-update-college/CreateUpdateCollege';
 import Header from './components/header/Header';
@@ -18,23 +17,8 @@ import { CollegeMainContextProvider } from './providers/CollegeMainContext';
 import Profile from './components/profile/Profile';
 import { UserProfileContextProvider } from './hooks/user-manager/UserProfileManagerContext';
 import ErrorBoundary from './error-boundry/ErrorBoundry';
-import InternetNotFound from './components/internet-not-found/InternetNotFound';
-// import { useQuery } from '@apollo/react-hooks';
-// import { graphql, compose } from 'react-apollo';
-// import { Provider } from 'react-redux';
-// import Routes from './routes/Routes';
-// import Header from './components/header/Header';
-// import LeftDrawer from './components/drawer/LeftDrawer';
-// import CreateUpdateCollege from './components/forms/create-update-college/CreateUpdateCollege';
-
-// const GET_POKEMON_INFO = gql`
-// query GetColleges{
-//   getcolleges{
-//     id
-//     name
-//     address
-//   }
-// }`;
+import NetworkOffline from './components/check-network-status/NetworkOffline';
+import NetworkOnline from './components/check-network-status/NetworkOnline';
 const useStyles = makeStyles((theme) => ({
 
   content: {
@@ -47,18 +31,28 @@ const useStyles = makeStyles((theme) => ({
 function App(props) {
   console.log(`App props: ${JSON.stringify(props)}`);
   const classes = useStyles();
+  const [showBackOnline, setShowBackOnline] = useState(false);
+  const [showBackOffline, setShowBackOffline] = useState(false);
   //const timer = useIdleTimer(120);
+
+  window.onoffline = (event) => {
+    setShowBackOffline(true);
+  };
+
+  window.ononline = (event) => {
+    setShowBackOffline(false);
+    setShowBackOnline(true);
+  };
 
   return (
     <>
-      <Online>
-        <CollegeMainContextProvider>
-          <UserProfileContextProvider>
-            <ErrorBoundary>
-              <Header />
-              <LeftDrawer />
-              <main className={classes.content}>
-                {/*
+      <CollegeMainContextProvider>
+        <UserProfileContextProvider>
+          <ErrorBoundary>
+            <Header />
+            <LeftDrawer />
+            <main className={classes.content}>
+              {/*
           timer > 0 ? <Routes /> :
             <div style={{ marginLeft: "20%" }}>
               <Alert variant="filled" severity="error">
@@ -67,18 +61,17 @@ function App(props) {
             </div>
         
         */}
-                <Routes />
-              </main>
-              <SpeedDIal />
+              <Routes />
+            </main>
+            <SpeedDIal />
+            <div className="footer">
               <Footer />
-            </ErrorBoundary>
-          </UserProfileContextProvider>
-        </CollegeMainContextProvider>
-        <InternetNotFound />
-      </Online>
-      <Offline>
-        <InternetNotFound />
-      </Offline>
+              {showBackOnline && <NetworkOnline />}
+              {showBackOffline && <NetworkOffline />}
+            </div>
+          </ErrorBoundary>
+        </UserProfileContextProvider>
+      </CollegeMainContextProvider>
     </>
   );
 }
