@@ -17,6 +17,21 @@ export const validateLoginForm = (value) => {
     return errors;
 };
 
+export const validateOTPForm = (value) => {
+    let errors = {};
+
+    if (!value) {
+        errors.otp = 'OTP is required';
+    } else if (value.length < 6 || value.length > 6) {
+        errors.otp = 'OTP length must be 6 number long';
+    }else if(isNaN(value)){
+        errors.otp = 'OTP must be number';
+    }
+
+    return errors;
+};
+
+
 export const validateSignupForm = (value) => {
     let errors = {};
 
