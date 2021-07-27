@@ -29,18 +29,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App(props) {
-  console.log(`App props: ${JSON.stringify(props)}`);
   const classes = useStyles();
   const [showBackOnline, setShowBackOnline] = useState(false);
-  const [showBackOffline, setShowBackOffline] = useState(false);
+  const [showOffline, setShowOffline] = useState(false);
   //const timer = useIdleTimer(120);
 
   window.onoffline = (event) => {
-    setShowBackOffline(true);
+    setShowOffline(true);
   };
 
   window.ononline = (event) => {
-    setShowBackOffline(false);
+    setShowOffline(false);
     setShowBackOnline(true);
   };
 
@@ -67,7 +66,7 @@ function App(props) {
             <div className="footer">
               <Footer />
               {showBackOnline && <NetworkOnline />}
-              {showBackOffline && <NetworkOffline />}
+              {showOffline && <NetworkOffline />}
             </div>
           </ErrorBoundary>
         </UserProfileContextProvider>
