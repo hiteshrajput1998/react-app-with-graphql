@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
+    },
+    menuItem: {
+        maxHeight: '15%'
     }
 }));
 
@@ -59,6 +62,12 @@ const Header = (props) => {
             case "Hindi":
                 i18n.changeLanguage("hin");
                 break;
+            case "Swedish":
+                i18n.changeLanguage("swedish");
+                break;
+            case "Japanese":
+                i18n.changeLanguage("jap");
+                break;
             default:
                 i18n.changeLanguage("en");
                 break;
@@ -84,10 +93,13 @@ const Header = (props) => {
                             renderValue={() => {
                                 return "";
                             }}
+                            MenuProps={{classes: {paper: classes.menuItem}}}
                         >
                             <MenuItem value="English">English</MenuItem>
                             <MenuItem value="Gujarati">Gujarati</MenuItem>
                             <MenuItem value="Hindi">Hindi</MenuItem>
+                            <MenuItem value="Swedish">Swedish</MenuItem>
+                            <MenuItem value="Japanese">Japanese</MenuItem>
                         </Select>
                     </div>
                 </Toolbar>
