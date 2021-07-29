@@ -1,6 +1,7 @@
 import React from 'react';
 import i18n from "i18next";
 import { useTranslation } from 'react-i18next';
+import { createHashHistory as createHistory } from 'history';
 import { AppBar, makeStyles, Toolbar, Typography, CssBaseline, Button, DRO, Select, MenuItem, ListItemIcon, ListItemText, InputLabel, FormControl } from '@material-ui/core';
 import GTranslateIcon from '@material-ui/icons/GTranslate';
 import LeftDrawer from '../drawer/LeftDrawer';
@@ -43,6 +44,7 @@ const Header = (props) => {
 
     const classes = useStyles();
     const { t } = useTranslation();
+    const history = createHistory();
 
     const color = {
         color: 'white'
@@ -74,6 +76,10 @@ const Header = (props) => {
         }
     };
 
+    const handleLogin = () => {
+        history.push('login');
+    };
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -84,6 +90,7 @@ const Header = (props) => {
                             t('hr')
                         }
                     </Typography>
+                    <Button color="inherit" onClick={handleLogin}>Login</Button>
 
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <Select
@@ -93,7 +100,7 @@ const Header = (props) => {
                             renderValue={() => {
                                 return "";
                             }}
-                            MenuProps={{classes: {paper: classes.menuItem}}}
+                            MenuProps={{ classes: { paper: classes.menuItem } }}
                         >
                             <MenuItem value="English">English</MenuItem>
                             <MenuItem value="Gujarati">Gujarati</MenuItem>
