@@ -1,18 +1,44 @@
 import { useEffect, useState } from "react"
-import { removeCollegeById, removeCollegeByIds, loadColleges } from "../../api/college-api/CollegeAPI.js";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import { removeCollegeById, removeCollegeByIds, loadColleges, createCollege, updateCollegeInfo } from "../../api/college-api/CollegeAPI.js";
 
 
-export const useCollegeHooks = (actions) => {
+export const useCollegeManager = (actions) => {
     //console.log(`useCollegeHooks Actions: ${JSON.stringify(actions)}`);
     const [collegesData, setCollegesData] = useState([]);
-    const [mutateResponse, setMutateResponse] = useState();
-    const [error, setError] = useState(null);
+    const { t } = useTranslation();
+
+    const setMutateResult = (result) => {
+        if (result?.networkError || result?.graphQLErrors) {
+
+            if (Object.keys(result?.graphQLErrors).length > 0) {
+                toast.error(t('error.graphql'));
+            }
+            if (result?.networkError) {
+                toast.error(t('error.network'));
+            }
+            
+        } else {
+
+            if(result.data?.createCollege)
+                toast.success(result.data.createCollege.message)
+
+            if (result.data?.deleteCollege)
+                toast.success(result.data.deleteCollege.message)
+
+            if(result.data?.deleteColleges)
+                toast.success(result.data.deleteColleges.message)
+
+            getColleges();
+        }
+    };
 
     const getColleges = () => {
         loadColleges({}, result => {
             if (result?.networkError || result?.graphQLErrors) {
                 // setCollegesData({ error: result });
-                setError({ error: result });
+                setMutateResult(result);
             } else {
                 //console.log(`CollegeManagerHook: ${JSON.stringify(result)}`);
                 setCollegesData(result);
@@ -20,34 +46,36 @@ export const useCollegeHooks = (actions) => {
         });
     };
 
+    const addCollege = async (input) => {
+        createCollege(input, result => {
+            setMutateResult(result);
+        });
+    };
+
+    const updateCollege = (id, input) => {
+        updateCollegeInfo({ id, input }, result => {
+            setMutateResult(result);
+        });
+    };
+
     const deleteCollegeById = (id) => {
         removeCollegeById(id, result => {
-            if (result?.networkError || result?.graphQLErrors) {
-                setError({ error: result });
-            } else {
-                setMutateResponse(result);
-                getColleges();
-            }
+            setMutateResult(result);
         });
     };
 
     const deleteCollegeByIds = (ids) => {
         removeCollegeByIds(ids, result => {
-            if (result?.networkError || result?.graphQLErrors) {
-                setError({ error: result });
-            } else {
-                setMutateResponse(result);
-                getColleges();
-            }
+            setMutateResult(result);
         });
     };
 
-    return [
+    return {
         collegesData,
         getColleges,
-        mutateResponse,
+        addCollege,
+        updateCollege,
         deleteCollegeById,
-        deleteCollegeByIds,
-        error
-    ];
+        deleteCollegeByIds
+    };
 };

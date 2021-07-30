@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { useCollegeHooks } from './CollegeManagerHook';
+import { useCollegeManager } from './CollegeManagerHook';
 
 export const CollegeContext = React.createContext();
 
@@ -8,10 +8,24 @@ export const CollegeContextProvider = ({ children, actions }) => {
     //console.log(`CollegeContextProvider`);
     //console.log(children);
 
-    const [collegesData, getColleges, deleteResponse, deleteCollegeById, deleteCollegeByIds, error] = useCollegeHooks(actions);
+    const {
+        collegesData,
+        getColleges,
+        addCollege,
+        updateCollege,
+        deleteCollegeById,
+        deleteCollegeByIds
+    } = useCollegeManager(actions);
 
     return (
-        <CollegeContext.Provider value={[collegesData, getColleges, deleteResponse, deleteCollegeById, deleteCollegeByIds, error]}>
+        <CollegeContext.Provider value={{
+            collegesData,
+            getColleges,
+            addCollege,
+            updateCollege,
+            deleteCollegeById,
+            deleteCollegeByIds
+        }}>
             {children}
         </CollegeContext.Provider>
     )

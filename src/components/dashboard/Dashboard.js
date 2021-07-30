@@ -46,7 +46,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = (props) => {
 
-    const [collegesData, getColleges, mutateResponse, deleteCollegeById, deleteCollegeByIds, error] = useCollegeContext();
+    const { collegesData,
+        getColleges,
+        deleteCollegeById,
+        deleteCollegeByIds } = useCollegeContext();
+
     const classes = useStyles();
     const { t } = useTranslation();
     const [rowsData, setRowsData] = useState([]);
@@ -64,36 +68,11 @@ const Dashboard = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
-        
+
         if (Object(collegesData.data).getcolleges) {
             setRowsData(Object(collegesData.data).getcolleges);
         }
     }, [Object(collegesData.data).getcolleges, collegesData.error, rowsData]);
-
-    // delete response toaster
-    useEffect(() => {
-        if (Object(mutateResponse?.data)) {
-
-            if(Object(mutateResponse?.data).deleteCollege?.message)
-                toast.success(Object(mutateResponse?.data).deleteCollege?.message);
-
-            if(Object(mutateResponse)?.data?.deleteColleges?.message)
-                toast.success(Object(mutateResponse)?.data?.deleteColleges?.message)
-        }
-    }, [mutateResponse]);
-
-    // setError 
-    useEffect(() => {
-        if (error !== null) {
-            const { networkError, graphQLErrors } = error?.error;
-            if (Object.keys(graphQLErrors).length > 0) {
-                toast.error(t('error.graphql'));
-            }
-            if (networkError) {
-                toast.error(t('error.network'));
-            }
-        }
-    }, [error]);
 
     const handleClose = () => {
         setDeleteParams({});
@@ -101,7 +80,6 @@ const Dashboard = (props) => {
     };
 
     const handleUpdate = (params) => {
-        //props.history.push('/updateCollege');
         props.history.push({
             pathname: '/updateCollege/' + params.id,
             arguments: { ...params.row, updateCollege: true }
