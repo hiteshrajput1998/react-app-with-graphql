@@ -2,10 +2,10 @@ import { useEffect, useState } from "react"
 import { removeCollegeById, removeCollegeByIds, loadColleges } from "../../api/college-api/CollegeAPI.js";
 
 
-export const useCollegesRetriver = (actions) => {
-    //console.log(`useCollegesRetriver Actions: ${JSON.stringify(actions)}`);
+export const useCollegeHooks = (actions) => {
+    //console.log(`useCollegeHooks Actions: ${JSON.stringify(actions)}`);
     const [collegesData, setCollegesData] = useState([]);
-    const [deleteResponse, setDeleteResponse] = useState();
+    const [mutateResponse, setMutateResponse] = useState();
     const [error, setError] = useState(null);
 
     const getColleges = () => {
@@ -25,8 +25,8 @@ export const useCollegesRetriver = (actions) => {
             if (result?.networkError || result?.graphQLErrors) {
                 setError({ error: result });
             } else {
+                setMutateResponse(result);
                 getColleges();
-                setDeleteResponse(result);
             }
         });
     };
@@ -36,8 +36,8 @@ export const useCollegesRetriver = (actions) => {
             if (result?.networkError || result?.graphQLErrors) {
                 setError({ error: result });
             } else {
+                setMutateResponse(result);
                 getColleges();
-                setDeleteResponse(result);
             }
         });
     };
@@ -45,7 +45,7 @@ export const useCollegesRetriver = (actions) => {
     return [
         collegesData,
         getColleges,
-        deleteResponse,
+        mutateResponse,
         deleteCollegeById,
         deleteCollegeByIds,
         error
