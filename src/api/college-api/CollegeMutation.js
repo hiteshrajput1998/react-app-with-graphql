@@ -28,14 +28,9 @@ export const UPDATE_COLLEGE_SCHEMA = gql`
 `;
 
 export const DELETE_COLLEGE_SCHEMA = gql`
-    ${CORE_COLLEGE_FIELDS}
     mutation DeleteCollege($id: String!){
         deleteCollege(id: $id){
             message
-            data{
-                id
-                ...CoreCollegeFields
-            }
         }
     }`;
 

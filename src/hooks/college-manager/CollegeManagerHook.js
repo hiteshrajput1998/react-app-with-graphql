@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { deleteCollegeById2, deleteCollegeByIds2, loadColleges } from "../../api/college-api/CollegeAPI.js";
+import { removeCollegeById, removeCollegeByIds, loadColleges } from "../../api/college-api/CollegeAPI.js";
 
 
 export const useCollegesRetriver = (actions) => {
@@ -21,7 +21,7 @@ export const useCollegesRetriver = (actions) => {
     };
 
     const deleteCollegeById = (id) => {
-        deleteCollegeById2(id, result => {
+        removeCollegeById(id, result => {
             if (result?.networkError || result?.graphQLErrors) {
                 setError({ error: result });
             } else {
@@ -32,7 +32,7 @@ export const useCollegesRetriver = (actions) => {
     };
 
     const deleteCollegeByIds = (ids) => {
-        deleteCollegeByIds2(ids, result => {
+        removeCollegeByIds(ids, result => {
             if (result?.networkError || result?.graphQLErrors) {
                 setError({ error: result });
             } else {
