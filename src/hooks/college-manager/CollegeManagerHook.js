@@ -21,16 +21,16 @@ export const useCollegeManager = (actions) => {
         } else {
 
             if (result.data?.createCollege)
-                toast.success(result.data.createCollege.message)
+                toast.success(result.data.createCollege.message);
 
             if (result.data?.deleteCollege)
-                toast.success(result.data.deleteCollege.message)
+                toast.success(result.data.deleteCollege.message);
 
             if (result.data?.updateCollege)
-                toast.success(result.data.updateCollege.message)
+                toast.success(result.data.updateCollege.message);
 
             if (result.data?.deleteColleges)
-                toast.success(result.data.deleteColleges.message)
+                toast.success(result.data.deleteColleges.message);
 
             getColleges();
         }
