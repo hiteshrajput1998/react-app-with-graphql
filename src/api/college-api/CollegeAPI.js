@@ -17,7 +17,7 @@ export const loadColleges = (options, callback) => {
         });
 };
 
-export const deleteCollegeById2 = (id, callback) => {
+export const removeCollegeById = (id, callback) => {
     client
         .mutate({
             mutation: DELETE_COLLEGE_SCHEMA,
@@ -32,7 +32,7 @@ export const deleteCollegeById2 = (id, callback) => {
         });
 };
 
-export const deleteCollegeByIds2 = (ids, callback) => {
+export const removeCollegeByIds = (ids, callback) => {
     client
         .mutate({
             mutation: DELETE_COLLEGES_BY_IDS_SCHEMA,

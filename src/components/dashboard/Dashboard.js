@@ -51,9 +51,6 @@ const Dashboard = (props) => {
     const { t } = useTranslation();
     const [rowsData, setRowsData] = useState([]);
 
-    const [errors, setErrors] = useState({
-        others: ''
-    });
     const [open, setOpen] = React.useState(false);
     const [deleteParams, setDeleteParams] = useState({});
 
@@ -67,6 +64,7 @@ const Dashboard = (props) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
+        
         if (Object(collegesData.data).getcolleges) {
             setRowsData(Object(collegesData.data).getcolleges);
         }
@@ -74,11 +72,13 @@ const Dashboard = (props) => {
 
     // delete response toaster
     useEffect(() => {
-        console.log(deleteResponse);
         if (Object(deleteResponse?.data)) {
-            console.log(deleteResponse);
-            console.log(Object(deleteResponse?.data?.deleteColleges)?.message);
-            toast.success(Object(deleteResponse?.data?.deleteColleges)?.message);
+
+            if(Object(deleteResponse?.data).deleteCollege?.message)
+                toast.success(Object(deleteResponse?.data).deleteCollege?.message);
+
+            if(Object(deleteResponse)?.data?.deleteColleges?.message)
+                toast.success(Object(deleteResponse)?.data?.deleteColleges?.message)
         }
     }, [deleteResponse]);
 
@@ -87,11 +87,9 @@ const Dashboard = (props) => {
         if (error !== null) {
             const { networkError, graphQLErrors } = error?.error;
             if (Object.keys(graphQLErrors).length > 0) {
-                console.log(error);
                 toast.error(t('error.graphql'));
             }
             if (networkError) {
-                console.log(error);
                 toast.error(t('error.network'));
             }
         }
@@ -192,23 +190,17 @@ const Dashboard = (props) => {
     //         toast.success(deleteColleges.message);
     //     }
     // });
-    console.log(Object(deleteResponse?.data).deleteCollege?.message);
 
     const handleDeleteConfirmation = async () => {
-        console.log(deleteParams);
 
         if (deleteParams?.id) {
-
             deleteCollegeById(deleteParams?.id);
             setOpen(false);
         }
 
         if (deleteParams?.ids) {
-
             deleteCollegeByIds(deleteParams?.ids);
             setOpen(false);
-
-            toast.success(Object(deleteResponse?.data).deleteCollege?.message);
         }
     };
 
@@ -228,7 +220,6 @@ const Dashboard = (props) => {
     }
 
     const handlePurge = () => {
-        console.log(selectedIds);
         setDeleteParams({
             ids: selectedIds
         });
