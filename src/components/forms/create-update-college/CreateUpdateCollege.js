@@ -98,38 +98,25 @@ const CreateUpdateCollege = (props) => {
         // }
     }, [props, data]);
 
-    // useEffect(() => {
-    //     if (Object(mutateResponse?.data)) {
-
-    //         if (Object(mutateResponse?.data).createCollege?.message) {
-    //             toast.success(Object(mutateResponse?.data).createCollege?.message);
-    //             props.history.push('/dashboard');
+    // const [setCreateCollegeMutation] = useMutation(CREATE_COLLEGE_SCHEMA, {
+    //     onCompleted: (res) => {
+    //         console.log(res);
+    //         toast.success('College created!');
+    //         props.history.push('/dashboard');
+    //     },
+    //     onError: ({ networkError, graphQLErrors }) => {
+    //         if (networkError) {
+    //             toast.error('networkError!');
+    //             console.log(networkError);
+    //             //setErrors({ others: networkError.map(x => x.message)[0] })
     //         }
-
-    //         if (Object(mutateResponse)?.data?.deleteColleges?.message)
-    //             toast.success(Object(mutateResponse)?.data?.deleteColleges?.message)
+    //         if (graphQLErrors) {
+    //             toast.error('graphQLErrors!');
+    //             console.log(graphQLErrors);
+    //             //setErrors({ others: graphQLErrorst.map(x => x.message)[0] })
+    //         }
     //     }
-    // }, [mutateResponse]);
-
-    const [setCreateCollegeMutation] = useMutation(CREATE_COLLEGE_SCHEMA, {
-        onCompleted: (res) => {
-            console.log(res);
-            toast.success('College created!');
-            props.history.push('/dashboard');
-        },
-        onError: ({ networkError, graphQLErrors }) => {
-            if (networkError) {
-                toast.error('networkError!');
-                console.log(networkError);
-                //setErrors({ others: networkError.map(x => x.message)[0] })
-            }
-            if (graphQLErrors) {
-                toast.error('graphQLErrors!');
-                console.log(graphQLErrors);
-                //setErrors({ others: graphQLErrorst.map(x => x.message)[0] })
-            }
-        }
-    });
+    // });
 
     const [setUpdateCollegeMutation] = useMutation(UPDATE_COLLEGE_SCHEMA, {
         onCompleted: (res) => {
@@ -149,9 +136,6 @@ const CreateUpdateCollege = (props) => {
             }
         }
     });
-
-
-
 
     // useEffect(() => {
     //     console.log('useEffect called');
@@ -183,13 +167,17 @@ const CreateUpdateCollege = (props) => {
         }
 
         if (updateId) {
-            setUpdateCollegeMutation({
-                variables: {
-                    id: props.location.arguments.id,
-                    input: collegeData
-                }
-            })
+
+            updateCollege(props.location.arguments.id, collegeData);
+            props.history.push('/dashboard');
+            // setUpdateCollegeMutation({
+            //     variables: {
+            //         id: props.location.arguments.id,
+            //         input: collegeData
+            //     }
+            // });
         } else {
+            
             addCollege(collegeData);
             props.history.push('/dashboard');
             // setCreateCollegeMutation({

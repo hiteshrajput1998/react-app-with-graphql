@@ -1,5 +1,5 @@
 import React from 'react';
-import { GET_COLLEGES_SCHEMA } from './CollegeQueries';
+import { GET_COLLEGES_SCHEMA, GET_COLLEGE_SCHEMA } from './CollegeQueries';
 import { client } from '../../index';
 import { CREATE_COLLEGE_SCHEMA, DELETE_COLLEGES_BY_IDS_SCHEMA, DELETE_COLLEGE_SCHEMA, UPDATE_COLLEGE_SCHEMA } from './CollegeMutation';
 
@@ -7,6 +7,20 @@ export const loadColleges = (options, callback) => {
     client
         .query({
             query: GET_COLLEGES_SCHEMA,
+            fetchPolicy: "no-cache"
+        })
+        .then(result => {
+            callback(result);
+        })
+        .catch(error => {
+            callback(error);
+        });
+};
+
+export const getCollegeInfo = (options, callback) => {
+    client
+        .query({
+            query: GET_COLLEGE_SCHEMA,
             fetchPolicy: "no-cache"
         })
         .then(result => {

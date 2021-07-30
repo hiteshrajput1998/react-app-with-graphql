@@ -11,6 +11,7 @@ export const CollegeContextProvider = ({ children, actions }) => {
     const {
         collegesData,
         getColleges,
+        getCollege,
         addCollege,
         updateCollege,
         deleteCollegeById,
@@ -21,6 +22,7 @@ export const CollegeContextProvider = ({ children, actions }) => {
         <CollegeContext.Provider value={{
             collegesData,
             getColleges,
+            getCollege,
             addCollege,
             updateCollege,
             deleteCollegeById,
