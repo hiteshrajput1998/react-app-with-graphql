@@ -7,6 +7,7 @@ import { validateCollegeForm } from '../../utils';
 import { CREATE_COLLEGE_SCHEMA, UPDATE_COLLEGE_SCHEMA } from '../../../api/college-api/CollegeMutation';
 import { GET_COLLEGE_SCHEMA } from '../../../api/college-api/CollegeQueries';
 import { useMutation, useQuery } from 'react-apollo';
+import { useCollegeContext } from '../../../hooks/college-manager/CollegeManagerContext';
 
 
 const useStyles = makeStyles(theme => ({
@@ -52,9 +53,12 @@ const useStyles = makeStyles(theme => ({
 
 
 const CreateUpdateCollege = (props) => {
-    console.log(props);
 
     const classes = useStyles();
+    const {
+        addCollege,
+        updateCollege } = useCollegeContext();
+
     const [collegeData, setData] = useState({
         collegeName: '',
         address: ''
@@ -94,6 +98,19 @@ const CreateUpdateCollege = (props) => {
         // }
     }, [props, data]);
 
+    // useEffect(() => {
+    //     if (Object(mutateResponse?.data)) {
+
+    //         if (Object(mutateResponse?.data).createCollege?.message) {
+    //             toast.success(Object(mutateResponse?.data).createCollege?.message);
+    //             props.history.push('/dashboard');
+    //         }
+
+    //         if (Object(mutateResponse)?.data?.deleteColleges?.message)
+    //             toast.success(Object(mutateResponse)?.data?.deleteColleges?.message)
+    //     }
+    // }, [mutateResponse]);
+
     const [setCreateCollegeMutation] = useMutation(CREATE_COLLEGE_SCHEMA, {
         onCompleted: (res) => {
             console.log(res);
@@ -112,7 +129,7 @@ const CreateUpdateCollege = (props) => {
                 //setErrors({ others: graphQLErrorst.map(x => x.message)[0] })
             }
         }
-    })
+    });
 
     const [setUpdateCollegeMutation] = useMutation(UPDATE_COLLEGE_SCHEMA, {
         onCompleted: (res) => {
@@ -173,11 +190,13 @@ const CreateUpdateCollege = (props) => {
                 }
             })
         } else {
-            setCreateCollegeMutation({
-                variables: {
-                    input: collegeData
-                }
-            })
+            addCollege(collegeData);
+            props.history.push('/dashboard');
+            // setCreateCollegeMutation({
+            //     variables: {
+            //         input: collegeData
+            //     }
+            // })
         }
     };
 
