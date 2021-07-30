@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { removeCollegeById, removeCollegeByIds, loadColleges, createCollege, updateCollegeInfo } from "../../api/college-api/CollegeAPI.js";
+import { removeCollegeById, removeCollegeByIds, loadColleges, createCollege, updateCollegeInfo, getCollegeInfo } from "../../api/college-api/CollegeAPI.js";
 
 
 export const useCollegeManager = (actions) => {
@@ -18,31 +18,41 @@ export const useCollegeManager = (actions) => {
             if (result?.networkError) {
                 toast.error(t('error.network'));
             }
-            
         } else {
 
-            if(result.data?.createCollege)
+            if (result.data?.createCollege)
                 toast.success(result.data.createCollege.message)
 
             if (result.data?.deleteCollege)
                 toast.success(result.data.deleteCollege.message)
 
-            if(result.data?.deleteColleges)
+            if (result.data?.updateCollege)
+                toast.success(result.data.updateCollege.message)
+
+            if (result.data?.deleteColleges)
                 toast.success(result.data.deleteColleges.message)
 
             getColleges();
         }
     };
 
+    const setQueryResult = (result) => {
+        if (result?.networkError || result?.graphQLErrors) {
+            setMutateResult(result);
+        } else {
+            setCollegesData(result);
+        }
+    };
+
     const getColleges = () => {
         loadColleges({}, result => {
-            if (result?.networkError || result?.graphQLErrors) {
-                // setCollegesData({ error: result });
-                setMutateResult(result);
-            } else {
-                //console.log(`CollegeManagerHook: ${JSON.stringify(result)}`);
-                setCollegesData(result);
-            }
+            setQueryResult(result);
+        });
+    };
+
+    const getCollege = (id) => {
+        getCollegeInfo({ id }, result => {
+            setQueryResult(result);
         });
     };
 
@@ -73,6 +83,7 @@ export const useCollegeManager = (actions) => {
     return {
         collegesData,
         getColleges,
+        getCollege,
         addCollege,
         updateCollege,
         deleteCollegeById,
