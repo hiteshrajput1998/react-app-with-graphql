@@ -39,7 +39,7 @@ export const DELETE_COLLEGE_SCHEMA = gql`
         }
     }`;
 
-export const DELETE_COLLEGES_BY_ID = gql`
+export const DELETE_COLLEGES_BY_IDS_SCHEMA = gql`
     mutation DeleteColleges($ids: [String]!){
         deleteColleges(ids: $ids){
             message

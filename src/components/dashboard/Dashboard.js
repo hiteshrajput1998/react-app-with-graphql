@@ -15,7 +15,7 @@ import { useMutation, useQuery } from 'react-apollo';
 import { GET_COLLEGES_SCHEMA } from '../../api/college-api/CollegeQueries';
 import { ToastContainer, toast } from 'react-toastify';
 import { Edit, Delete } from '@material-ui/icons';
-import { DELETE_COLLEGES_BY_ID, DELETE_COLLEGE_SCHEMA } from '../../api/college-api/CollegeMutation';
+import { DELETE_COLLEGES_BY_ID, DELETE_COLLEGES_BY_IDS_SCHEMA, DELETE_COLLEGE_SCHEMA } from '../../api/college-api/CollegeMutation';
 import { useCollegeContext } from '../../hooks/college-manager/CollegeManagerContext';
 
 
@@ -46,8 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = (props) => {
 
-    const { collegesData } = useCollegeContext();
-
+    const [collegesData, getColleges, deleteResponse, deleteCollegeById, deleteCollegeByIds, error] = useCollegeContext();
     const classes = useStyles();
     const { t } = useTranslation();
     const [rowsData, setRowsData] = useState([]);
@@ -61,13 +60,49 @@ const Dashboard = (props) => {
     const [selectedIds, setSelectedVal] = React.useState([]);
     //const { loading, error, data, refetch } = useQuery(GET_COLLEGES_SCHEMA, { errorPolicy: 'all' });
 
+
+    useEffect(() => {
+        getColleges();
+    }, []);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => {
+        if (Object(collegesData.data).getcolleges) {
+            setRowsData(Object(collegesData.data).getcolleges);
+        }
+    }, [Object(collegesData.data).getcolleges, collegesData.error, rowsData]);
+
+    // delete response toaster
+    useEffect(() => {
+        console.log(deleteResponse);
+        if (Object(deleteResponse?.data)) {
+            console.log(deleteResponse);
+            console.log(Object(deleteResponse?.data?.deleteColleges)?.message);
+            toast.success(Object(deleteResponse?.data?.deleteColleges)?.message);
+        }
+    }, [deleteResponse]);
+
+    // setError 
+    useEffect(() => {
+        if (error !== null) {
+            const { networkError, graphQLErrors } = error?.error;
+            if (Object.keys(graphQLErrors).length > 0) {
+                console.log(error);
+                toast.error(t('error.graphql'));
+            }
+            if (networkError) {
+                console.log(error);
+                toast.error(t('error.network'));
+            }
+        }
+    }, [error]);
+
     const handleClose = () => {
         setDeleteParams({});
         setOpen(false);
     };
 
     const handleUpdate = (params) => {
-        console.log(params);
         //props.history.push('/updateCollege');
         props.history.push({
             pathname: '/updateCollege/' + params.id,
@@ -116,87 +151,64 @@ const Dashboard = (props) => {
         },
     ];
 
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => {
-        if (collegesData.error) {
-            console.log(`error`);
-            const { networkError, graphQLErrors } = collegesData.error;
-            if (graphQLErrors.length > 0) {
-                console.log(graphQLErrors);
-                //setErrors({ others: graphQLErrors.map(x => x.message)[0] })
-                toast.error('Something is wrong!');
-            }
-
-            if (Object.keys(networkError)) {
-                console.log(networkError);
-                //setErrors({ others: 'network error!' })
-                toast.error(t('error.network'));
-            }
-        }
-
-        if (Object(collegesData.data).getcolleges) {
-            setRowsData(Object(collegesData.data).getcolleges);
-        }
-    }, [Object(collegesData.data).getcolleges, collegesData.error, rowsData]);
-
     //Delete college through id
-    const [setMutationData] = useMutation(DELETE_COLLEGE_SCHEMA, {
-        onError: ({ networkError, graphQLErrors }) => {
-            if (graphQLErrors) {
-                setErrors({ others: graphQLErrors.map(x => x.message)[0] })
-            }
+    // const [setMutationData] = useMutation(DELETE_COLLEGE_SCHEMA, {
+    //     onError: ({ networkError, graphQLErrors }) => {
+    //         if (graphQLErrors) {
+    //             setErrors({ others: graphQLErrors.map(x => x.message)[0] })
+    //         }
 
-            if (networkError) {
-                console.log(networkError);
-                setErrors({ others: 'network error!' })
-            }
-            toast.error('Delete failed!');
-        },
-        onCompleted: ({ deleteCollege }) => {
-            console.log(deleteCollege);
-            setOpen(false);
-            toast.success(deleteCollege.message);
-            //props.history.push('/dashboard');
-        }
-    });
+    //         if (networkError) {
+    //             console.log(networkError);
+    //             setErrors({ others: 'network error!' })
+    //         }
+    //         toast.error('Delete failed!');
+    //     },
+    //     onCompleted: ({ deleteCollege }) => {
+    //         console.log(deleteCollege);
+    //         setOpen(false);
+    //         toast.success(deleteCollege.message);
+    //         getColleges();
+    //         //props.history.push('/dashboard');
+    //     }
+    // });
 
     //Delete colleges throgh id
-    const [setDeleteCollegesMutation] = useMutation(DELETE_COLLEGES_BY_ID, {
-        onError: ({ networkError, graphQLErrors }) => {
-            if (graphQLErrors) {
-                setErrors({ others: graphQLErrors.map(x => x.message)[0] })
-            }
+    // const [setDeleteCollegesMutation] = useMutation(DELETE_COLLEGES_BY_IDS_SCHEMA, {
+    //     onError: ({ networkError, graphQLErrors }) => {
+    //         if (graphQLErrors) {
+    //             setErrors({ others: graphQLErrors.map(x => x.message)[0] })
+    //         }
 
-            if (networkError) {
-                console.log(networkError);
-                setErrors({ others: 'network error!' })
-            }
-            toast.error('Delete failed!');
-        },
-        onCompleted: ({ deleteColleges }) => {
-            console.log(deleteColleges);
-            setOpen(false);
-            toast.success(deleteColleges.message);
-            //refetch();
-        }
-    });
+    //         if (networkError) {
+    //             console.log(networkError);
+    //             setErrors({ others: 'network error!' })
+    //         }
+    //         toast.error('Delete failed!');
+    //     },
+    //     onCompleted: ({ deleteColleges }) => {
+    //         console.log(deleteColleges);
+    //         setOpen(false);
+    //         toast.success(deleteColleges.message);
+    //     }
+    // });
+    console.log(Object(deleteResponse?.data).deleteCollege?.message);
 
-    const handleDeleteConfirmation = () => {
+    const handleDeleteConfirmation = async () => {
+        console.log(deleteParams);
 
         if (deleteParams?.id) {
-            setMutationData({
-                variables: {
-                    id: deleteParams.id
-                }
-            });
+
+            deleteCollegeById(deleteParams?.id);
+            setOpen(false);
         }
+
         if (deleteParams?.ids) {
-            setDeleteCollegesMutation({
-                variables: {
-                    ids: deleteParams.ids
-                }
-            })
+
+            deleteCollegeByIds(deleteParams?.ids);
+            setOpen(false);
+
+            toast.success(Object(deleteResponse?.data).deleteCollege?.message);
         }
     };
 
@@ -221,13 +233,6 @@ const Dashboard = (props) => {
             ids: selectedIds
         });
         setOpen(true);
-        // selectedIds.forEach(id => {
-        //     setMutationData({
-        //         variables: {
-        //             id: id
-        //         },
-        //     });
-        // });
     }
 
     return (
@@ -285,7 +290,7 @@ const Dashboard = (props) => {
                 <DialogTitle id="alert-dialog-title">{"Confirmation!"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you sure want to delete college?
+                        Are you sure want to delete ?
               </DialogContentText>
                 </DialogContent>
                 <DialogActions>

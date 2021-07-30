@@ -2,17 +2,16 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useCollegesRetriver } from './CollegeManagerHook';
 
-export const CollegeContext = React.createContext({});
+export const CollegeContext = React.createContext();
 
 export const CollegeContextProvider = ({ children, actions }) => {
     //console.log(`CollegeContextProvider`);
     //console.log(children);
 
-    const collegeData = useCollegesRetriver(actions);
-    //console.log(`CollegeData: ${JSON.stringify(collegeData)}`);
+    const [collegesData, getColleges, deleteResponse, deleteCollegeById, deleteCollegeByIds, error] = useCollegesRetriver(actions);
 
     return (
-        <CollegeContext.Provider value={collegeData}>
+        <CollegeContext.Provider value={[collegesData, getColleges, deleteResponse, deleteCollegeById, deleteCollegeByIds, error]}>
             {children}
         </CollegeContext.Provider>
     )

@@ -1,43 +1,53 @@
 import { useEffect, useState } from "react"
-import { deleteCollegeById, loadColleges } from "../../api/college-api/CollegeAPI.js";
+import { deleteCollegeById2, deleteCollegeByIds2, loadColleges } from "../../api/college-api/CollegeAPI.js";
 
 
 export const useCollegesRetriver = (actions) => {
     //console.log(`useCollegesRetriver Actions: ${JSON.stringify(actions)}`);
     const [collegesData, setCollegesData] = useState([]);
+    const [deleteResponse, setDeleteResponse] = useState();
     const [error, setError] = useState(null);
 
-    useEffect(() => {
+    const getColleges = () => {
         loadColleges({}, result => {
-            //console.log(`result: ${JSON.stringify(result)}`);
-            if (result.networkError || result.graphQLErrors) {
-                setCollegesData({error: result});
-                //setError(result);
+            if (result?.networkError || result?.graphQLErrors) {
+                // setCollegesData({ error: result });
+                setError({ error: result });
             } else {
                 //console.log(`CollegeManagerHook: ${JSON.stringify(result)}`);
                 setCollegesData(result);
             }
         });
-    }, []);
-
-    return {
-        collegesData
     };
-};
 
-export const useDeleteCollege = (id) => {
-    const [deleteResponse, setDeleteResponse] = useState();
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        deleteCollegeById(id, result => {
-            if (result.networkError || result.graphQLErrors) {
-                setError(result);
+    const deleteCollegeById = (id) => {
+        deleteCollegeById2(id, result => {
+            if (result?.networkError || result?.graphQLErrors) {
+                setError({ error: result });
             } else {
+                getColleges();
                 setDeleteResponse(result);
             }
         });
-    }, []);
+    };
 
-    return [deleteResponse, error];
+    const deleteCollegeByIds = (ids) => {
+        deleteCollegeByIds2(ids, result => {
+            if (result?.networkError || result?.graphQLErrors) {
+                setError({ error: result });
+            } else {
+                getColleges();
+                setDeleteResponse(result);
+            }
+        });
+    };
+
+    return [
+        collegesData,
+        getColleges,
+        deleteResponse,
+        deleteCollegeById,
+        deleteCollegeByIds,
+        error
+    ];
 };
