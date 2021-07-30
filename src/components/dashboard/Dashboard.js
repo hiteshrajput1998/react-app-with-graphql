@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = (props) => {
 
-    const [collegesData, getColleges, deleteResponse, deleteCollegeById, deleteCollegeByIds, error] = useCollegeContext();
+    const [collegesData, getColleges, mutateResponse, deleteCollegeById, deleteCollegeByIds, error] = useCollegeContext();
     const classes = useStyles();
     const { t } = useTranslation();
     const [rowsData, setRowsData] = useState([]);
@@ -72,15 +72,15 @@ const Dashboard = (props) => {
 
     // delete response toaster
     useEffect(() => {
-        if (Object(deleteResponse?.data)) {
+        if (Object(mutateResponse?.data)) {
 
-            if(Object(deleteResponse?.data).deleteCollege?.message)
-                toast.success(Object(deleteResponse?.data).deleteCollege?.message);
+            if(Object(mutateResponse?.data).deleteCollege?.message)
+                toast.success(Object(mutateResponse?.data).deleteCollege?.message);
 
-            if(Object(deleteResponse)?.data?.deleteColleges?.message)
-                toast.success(Object(deleteResponse)?.data?.deleteColleges?.message)
+            if(Object(mutateResponse)?.data?.deleteColleges?.message)
+                toast.success(Object(mutateResponse)?.data?.deleteColleges?.message)
         }
-    }, [deleteResponse]);
+    }, [mutateResponse]);
 
     // setError 
     useEffect(() => {
