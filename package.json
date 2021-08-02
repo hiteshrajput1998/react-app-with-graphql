@@ -40,7 +40,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "analyze": "source-map-explorer 'build/static/js/*.js' --html source_map_output.html",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
