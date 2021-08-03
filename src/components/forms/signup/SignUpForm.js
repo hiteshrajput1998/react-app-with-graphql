@@ -182,7 +182,7 @@ const SignUpForm = (props) => {
     }, [data.address.zipCode]);
 
     const zipCodeValidator = () => {
-        if (address.zipCode && (address.zipCode.length > 6 || address.zipCode.length < 6)) {
+        if (data.address.zipCode && (data.address.zipCode.length > 6 || data.address.zipCode.length < 6)) {
             setErrors({
                 zipCode: 'Zipcode must be 6 character long!'
             });
