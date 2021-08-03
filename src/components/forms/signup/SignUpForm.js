@@ -62,7 +62,12 @@ const SignUpForm = (props) => {
         email: '',
         created: '',
         firstName: '',
-        lastName: ''
+        lastName: '',
+        address: {
+            zipCode: null,
+            city: null,
+            state: null,
+        }
     });
 
     const [errors, setErrors] = useState({
@@ -114,18 +119,27 @@ const SignUpForm = (props) => {
     }, [data]);
 
     useEffect(() => {
-        const url = `https://api.postalpincode.in/pincode/${address.zipCode}`;
+        const url = `https://api.postalpincode.in/pincode/${data.address.zipCode}`;
 
         const setCityState = async () => {
             if (cache.current[url]) {
                 const data = cache.current[url];
                 console.log(data);
 
-                setAddress({
-                    zipCode: address.zipCode || '',
-                    city: (data.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
-                    state: (data.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
+                setData({
+                    ...data,
+                    address: {
+                        zipCode: data.address.zipCode || '',
+                        city: (data.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
+                        state: (data.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
+                    }
                 });
+
+                // setAddress({
+                //     zipCode: address.zipCode || '',
+                //     city: (data.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
+                //     state: (data.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
+                // });
             }
             else {
                 await axios(url)
@@ -137,11 +151,20 @@ const SignUpForm = (props) => {
                         }
                         else {
                             cache.current[url] = response;
-                            setAddress({
-                                zipCode: address.zipCode || '',
-                                city: (response.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
-                                state: (response.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
+                            console.log(response);
+                            setData({
+                                ...data,
+                                address: {
+                                    zipCode: data.address.zipCode || null,
+                                    city: (response.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
+                                    state: (response.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
+                                }
                             });
+                            // setAddress({
+                            //     zipCode: address.zipCode || '',
+                            //     city: (response.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
+                            //     state: (response.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
+                            // });
                         }
                     })
                     .catch(error => {
@@ -150,16 +173,16 @@ const SignUpForm = (props) => {
             }
         };
 
-        if (address.zipCode && address.zipCode.length === 6) {
+        if (data.address.zipCode && data.address.zipCode.length === 6) {
             setCityState();
         }
-        else{
+        else {
             zipCodeValidator();
         }
-    }, [address.zipCode]);
+    }, [data.address.zipCode]);
 
     const zipCodeValidator = () => {
-        if (address.zipCode && (address.zipCode.length > 6 || address.zipCode.length < 6)) {
+        if (data.address.zipCode && (data.address.zipCode.length > 6 || data.address.zipCode.length < 6)) {
             setErrors({
                 zipCode: 'Zipcode must be 6 character long!'
             });
@@ -193,9 +216,9 @@ const SignUpForm = (props) => {
         // let data3 = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
         // console.log(`data: ${JSON.stringify(data3)}`);
         setMutationData({
-            variables: {
-                inputRegister: data
-            }
+             variables: {
+                 inputRegister: data
+             }
         });
     }
 
@@ -267,7 +290,6 @@ const SignUpForm = (props) => {
                                             {errors.firstName} — check it out!
                                         </Alert>
                                     }
-
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
@@ -305,14 +327,19 @@ const SignUpForm = (props) => {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Autocomplete
-                                        value={address.zipCode ?? ''}
+                                        value={data.address.zipCode ?? ''}
                                         // onChange={(event, newValue) => {
                                         //     setAddress({ zipCode: (newValue.replace(/[^\d{6}]$/, "").substr(0, 6)) });
                                         // }}
-                                        inputValue={address.zipCode ?? ''}
+                                        inputValue={data.address.zipCode ?? ''}
                                         onInputChange={(event, newInputValue) => {
                                             setErrors({ zipCode: '' });
-                                            setAddress({ zipCode: newInputValue });// (newInputValue.replace(/[^\d{6}]$/, "").substr(0, 6)) });
+                                            setData({
+                                                ...data,
+                                                address: {
+                                                    zipCode: newInputValue //(newInputValue.replace(/[^\d{6}]$/, "").substr(0, 6))
+                                                }
+                                            });
                                         }}
                                         id="controllable-states-demo"
                                         options={['380022']}
@@ -326,25 +353,27 @@ const SignUpForm = (props) => {
                                         {errors.zipCode} — check it out!
                                     </Alert>
                                 }
-                                {(address.city !== null) && (address.state !== undefined) ? (<Grid item xs={12}>
+                                {(data.address.city !== null) && (data.address.state !== undefined) ? (<Grid item xs={12}>
                                     <TextField
                                         fullWidth
                                         label="city"
                                         name="city"
                                         size="small"
-                                        value={address.city}
+                                        value={data.address.city}
                                         variant="outlined"
+                                        disabled={true}
                                     />
                                 </Grid>) : ''
                                 }
-                                {(address.state !== null) && (address.state !== undefined) ? (<Grid item xs={12}>
+                                {(data.address.state !== null) && (data.address.state !== undefined) ? (<Grid item xs={12}>
                                     <TextField
                                         fullWidth
                                         label="state"
                                         name="state"
                                         size="small"
-                                        value={address.state}
+                                        value={data.address.state}
                                         variant="outlined"
+                                        disabled={true}
                                     />
                                 </Grid>) : ''
                                 }
