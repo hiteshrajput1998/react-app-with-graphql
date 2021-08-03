@@ -52,6 +52,10 @@ export const validateSignupForm = (value) => {
         errors.password = 'Password must be 4 character';
     }
 
+    if (!value.address.zipCode) {
+        errors.zipCode = 'Zipcode is required!';
+    }
+
     return errors;
 };
 
