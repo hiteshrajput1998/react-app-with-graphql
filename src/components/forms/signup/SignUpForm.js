@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Avatar, Button, Container, Grid, Paper } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import { Alert, Autocomplete } from '@material-ui/lab';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react';
@@ -11,6 +11,7 @@ import CryptoJS from 'crypto-js';
 import { validateSignupForm } from '../../utils';
 import { Register_RECORD } from '../../../api/forms/register/RegisterMutations';
 import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
 
 
 const useStyles = makeStyles(theme => ({
@@ -70,7 +71,14 @@ const SignUpForm = (props) => {
         email: '',
         firstName: '',
         lastName: '',
+        zipCode: '',
         other: ''
+    });
+
+    const [address, setAddress] = useState({
+        zipCode: null,
+        city: null,
+        state: null,
     });
 
     const [setMutationData] = useMutation(Register_RECORD, {
@@ -84,7 +92,7 @@ const SignUpForm = (props) => {
                 toast.error('Signup failed!');
                 setErrors({ others: networkError.map(x => x.message)[0] })
             }
-            
+
             if (graphQLErrors) {
                 toast.error('Signup failed!');
                 setErrors({ others: graphQLErrors.map(x => x.message)[0] })
@@ -101,7 +109,36 @@ const SignUpForm = (props) => {
         const validationErrors = validateSignupForm(data);
         console.log(validationErrors);
         setErrors(validationErrors);
-    }, [data])
+    }, [data]);
+
+    useEffect(() => {
+        const getCityState = async () => {
+            await axios(`https://api.postalpincode.in/pincode/${address.zipCode}`)
+                .then(response => {
+                    if (response.data[0].Status === 'Error') {
+                        setErrors({
+                            zipCode: response.data[0]?.Message
+                        });
+                    }
+                    else {
+                        setAddress({
+                            zipCode: address.zipCode || '',
+                            city: (response.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
+                            state: (response.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        };
+        
+        if (address.zipCode && address.zipCode.length > 5) {
+            getCityState();
+        }
+    }, [address.zipCode]);
+
+    console.log(address);
 
     const updateField = async e => {
         e.preventDefault();
@@ -240,6 +277,51 @@ const SignUpForm = (props) => {
                                         </Alert>
                                     }
                                 </Grid>
+                                <Grid item xs={12}>
+                                    <Autocomplete
+                                        value={address.zipCode ?? ''}
+                                        // onChange={(event, newValue) => {
+                                        //     setAddress({ zipCode: (newValue.replace(/[^\d{6}]$/, "").substr(0, 6)) });
+                                        // }}
+                                        inputValue={address.zipCode ?? ''}
+                                        onInputChange={(event, newInputValue) => {
+                                            setErrors({ zipCode: ''});
+                                            setAddress({ zipCode: (newInputValue.replace(/[^\d{6}]$/, "").substr(0, 6)) });
+                                        }}
+                                        id="controllable-states-demo"
+                                        options={['380022']}
+                                        style={{ width: 200 }}
+                                        renderInput={(params) => <TextField {...params} label="Zipcode" variant="outlined" />}
+                                    />
+                                </Grid>
+                                {
+                                    errors.zipCode &&
+                                    <Alert variant="outlined" severity="error" style={{marginLeft: '2%'}}>
+                                        {errors.zipCode} — check it out!
+                                    </Alert>
+                                }
+                                {(address.city !== null) && (address.state !== undefined) ? (<Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="city"
+                                        name="city"
+                                        size="small"
+                                        value={address.city}
+                                        variant="outlined"
+                                    />
+                                </Grid>) : ''
+                                }
+                                {(address.state !== null) && (address.state !== undefined) ? (<Grid item xs={12}>
+                                    <TextField
+                                        fullWidth
+                                        label="state"
+                                        name="state"
+                                        size="small"
+                                        value={address.state}
+                                        variant="outlined"
+                                    />
+                                </Grid>) : ''
+                                }
                             </Grid>
                         </Grid>
                         <Grid item xs={12}>
