@@ -81,6 +81,8 @@ const SignUpForm = (props) => {
         state: null,
     });
 
+    const cache = useRef({});
+
     const [setMutationData] = useMutation(Register_RECORD, {
         onCompleted: (res) => {
             console.log(res);
@@ -112,27 +114,42 @@ const SignUpForm = (props) => {
     }, [data]);
 
     useEffect(() => {
+        const url = `https://api.postalpincode.in/pincode/${address.zipCode}`;
+
         const getCityState = async () => {
-            await axios(`https://api.postalpincode.in/pincode/${address.zipCode}`)
-                .then(response => {
-                    if (response.data[0].Status === 'Error') {
-                        setErrors({
-                            zipCode: response.data[0]?.Message
-                        });
-                    }
-                    else {
-                        setAddress({
-                            zipCode: address.zipCode || '',
-                            city: (response.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
-                            state: (response.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
+            if (cache.current[url]) {
+                const data = cache.current[url];
+                console.log(data);
+
+                setAddress({
+                    zipCode: address.zipCode || '',
+                    city: (data.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
+                    state: (data.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
                 });
+            }
+            else {
+                await axios(url)
+                    .then(response => {
+                        if (response.data[0].Status === 'Error') {
+                            setErrors({
+                                zipCode: response.data[0]?.Message
+                            });
+                        }
+                        else {
+                            cache.current[url] = response;
+                            setAddress({
+                                zipCode: address.zipCode || '',
+                                city: (response.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
+                                state: (response.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
         };
-        
+
         if (address.zipCode && address.zipCode.length > 5) {
             getCityState();
         }
@@ -285,7 +302,7 @@ const SignUpForm = (props) => {
                                         // }}
                                         inputValue={address.zipCode ?? ''}
                                         onInputChange={(event, newInputValue) => {
-                                            setErrors({ zipCode: ''});
+                                            setErrors({ zipCode: '' });
                                             setAddress({ zipCode: (newInputValue.replace(/[^\d{6}]$/, "").substr(0, 6)) });
                                         }}
                                         id="controllable-states-demo"
@@ -296,7 +313,7 @@ const SignUpForm = (props) => {
                                 </Grid>
                                 {
                                     errors.zipCode &&
-                                    <Alert variant="outlined" severity="error" style={{marginLeft: '2%'}}>
+                                    <Alert variant="outlined" severity="error" style={{ marginLeft: '2%' }}>
                                         {errors.zipCode} — check it out!
                                     </Alert>
                                 }
