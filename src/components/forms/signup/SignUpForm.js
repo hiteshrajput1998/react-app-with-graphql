@@ -150,12 +150,21 @@ const SignUpForm = (props) => {
             }
         };
 
-        if (address.zipCode && address.zipCode.length > 5) {
+        if (address.zipCode && address.zipCode.length === 6) {
             setCityState();
+        }
+        else{
+            zipCodeValidator();
         }
     }, [address.zipCode]);
 
-    console.log(address);
+    const zipCodeValidator = () => {
+        if (address.zipCode && (address.zipCode.length > 6 || address.zipCode.length < 6)) {
+            setErrors({
+                zipCode: 'Zipcode must be 6 character long!'
+            });
+        }
+    };
 
     const updateField = async e => {
         e.preventDefault();
@@ -303,7 +312,7 @@ const SignUpForm = (props) => {
                                         inputValue={address.zipCode ?? ''}
                                         onInputChange={(event, newInputValue) => {
                                             setErrors({ zipCode: '' });
-                                            setAddress({ zipCode: (newInputValue.replace(/[^\d{6}]$/, "").substr(0, 6)) });
+                                            setAddress({ zipCode: newInputValue });// (newInputValue.replace(/[^\d{6}]$/, "").substr(0, 6)) });
                                         }}
                                         id="controllable-states-demo"
                                         options={['380022']}
