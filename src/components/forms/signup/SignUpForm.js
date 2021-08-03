@@ -116,7 +116,7 @@ const SignUpForm = (props) => {
     useEffect(() => {
         const url = `https://api.postalpincode.in/pincode/${address.zipCode}`;
 
-        const getCityState = async () => {
+        const setCityState = async () => {
             if (cache.current[url]) {
                 const data = cache.current[url];
                 console.log(data);
@@ -151,7 +151,7 @@ const SignUpForm = (props) => {
         };
 
         if (address.zipCode && address.zipCode.length > 5) {
-            getCityState();
+            setCityState();
         }
     }, [address.zipCode]);
 
