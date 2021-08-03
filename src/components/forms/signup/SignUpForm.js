@@ -215,11 +215,11 @@ const SignUpForm = (props) => {
         // console.log(`bytes: ${JSON.stringify(bytes)}`);
         // let data3 = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
         // console.log(`data: ${JSON.stringify(data3)}`);
-        // setMutationData({
-        //     variables: {
-        //         inputRegister: data
-        //     }
-        // });
+        setMutationData({
+             variables: {
+                 inputRegister: data
+             }
+        });
     }
 
     return (
