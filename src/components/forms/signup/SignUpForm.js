@@ -64,7 +64,7 @@ const SignUpForm = (props) => {
         firstName: '',
         lastName: '',
         address: {
-            zipCode: null,
+            zipCode: '',
             city: null,
             state: null,
         }
@@ -81,16 +81,15 @@ const SignUpForm = (props) => {
     });
 
     const [address, setAddress] = useState({
-        zipCode: null,
-        city: null,
-        state: null,
+        zipCode: '',
+        city: '',
+        state: '',
     });
 
     const cache = useRef({});
 
     const [setMutationData] = useMutation(Register_RECORD, {
         onCompleted: (res) => {
-            console.log(res);
             toast.success('Registered successfully!!');
             //localStorage.setItem("AUTH_TOKEN", loginUser.token);
         },
@@ -108,13 +107,11 @@ const SignUpForm = (props) => {
     });
 
     useEffect(() => {
-        console.log('useEffect called');
         if (firstRender.current) {
             firstRender.current = false
             return
         }
         const validationErrors = validateSignupForm(data);
-        console.log(validationErrors);
         setErrors(validationErrors);
     }, [data]);
 
@@ -123,15 +120,14 @@ const SignUpForm = (props) => {
 
         const setCityState = async () => {
             if (cache.current[url]) {
-                const data = cache.current[url];
-                console.log(data);
+                const cachedData = cache.current[url];
 
                 setData({
                     ...data,
                     address: {
                         zipCode: data.address.zipCode || '',
-                        city: (data.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
-                        state: (data.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
+                        city: (cachedData.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
+                        state: (cachedData.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
                     }
                 });
 
@@ -155,7 +151,7 @@ const SignUpForm = (props) => {
                             setData({
                                 ...data,
                                 address: {
-                                    zipCode: data.address.zipCode || null,
+                                    zipCode: data.address.zipCode || '',
                                     city: (response.data[0]?.PostOffice[0]?.District).toLowerCase() || '',
                                     state: (response.data[0]?.PostOffice[0]?.State).toLowerCase() || ''
                                 }
@@ -198,7 +194,6 @@ const SignUpForm = (props) => {
     };
 
     const handleSubmit = () => {
-        console.log(data);
         const validationErrors = validateSignupForm(data);
         console.log(validationErrors);
 
@@ -208,7 +203,6 @@ const SignUpForm = (props) => {
         }
 
         data.created = Date.now().toString();
-        console.log(data);
         const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), process.env.REACT_APP_SECRET_KEY).toString();
         console.log(encrypted);
         // const bytes = CryptoJS.AES.decrypt(encrypted, process.env.REACT_APP_SECRET_KEY);
@@ -216,9 +210,9 @@ const SignUpForm = (props) => {
         // let data3 = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
         // console.log(`data: ${JSON.stringify(data3)}`);
         setMutationData({
-             variables: {
-                 inputRegister: data
-             }
+            variables: {
+                inputRegister: data
+            }
         });
     }
 
@@ -337,7 +331,7 @@ const SignUpForm = (props) => {
                                             setData({
                                                 ...data,
                                                 address: {
-                                                    zipCode: newInputValue //(newInputValue.replace(/[^\d{6}]$/, "").substr(0, 6))
+                                                    zipCode: newInputValue || '' //(newInputValue.replace(/[^\d{6}]$/, "").substr(0, 6))
                                                 }
                                             });
                                         }}
