@@ -34,10 +34,12 @@ function App(props) {
   const [showOffline, setShowOffline] = useState(false);
   //const timer = useIdleTimer(120);
 
+  // event called when network switch from online to offline
   window.onoffline = (event) => {
     setShowOffline(true);
   };
 
+  // event called when network switch from offline to online
   window.ononline = (event) => {
     setShowOffline(false);
     setShowBackOnline(true);
