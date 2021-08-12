@@ -3,6 +3,7 @@ export const TRANSLATIONS_JAP = {
     hr: "HR",
     dashboard: "ダッシュボード",
     createCLG: "大学を作成する",
+    topHeading: "トップヘッドラインニュース",
     setting: "設定",
     2021: "2021年",
     error: {

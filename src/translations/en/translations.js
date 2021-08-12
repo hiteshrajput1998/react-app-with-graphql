@@ -3,6 +3,7 @@ export const TRANSLATIONS_EN = {
     hr: "HR",
     dashboard: "Dashboard",
     createCLG: "Create college",
+    topHeading: "Top Headline News",
     setting: "Setting",
     2021: "2021",
     error: {

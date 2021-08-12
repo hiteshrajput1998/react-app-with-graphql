@@ -3,6 +3,7 @@ export const TRANSLATIONS_HIN = {
     hr: "एचआर",
     dashboard: "डैशबोर्ड",
     createCLG: "कॉलेज बनाएं",
+    topHeading: "शीर्ष शीर्षक समाचार",
     setting: "स्थापना",
     2021: "२०२१",
     error: {

@@ -10,6 +10,7 @@ import NotFound from '../components/not-found/NotFound';
 const Dashboard = lazy(() => import('../components/dashboard/Dashboard'));
 const CreateUpdateCollege = lazy(() => import('../components/forms/create-update-college/CreateUpdateCollege'));
 const Profile = lazy(() => import('../components/profile/Profile'));
+const HeadingNews = lazy(() => import('../screens/top-heading-news/TopHeadingNews'));
 
 const Routes = () => {
     return (
@@ -22,6 +23,7 @@ const Routes = () => {
                 <Route path='/createCollege' exact component={CreateUpdateCollege} />
                 <Route path='/updateCollege/:id' component={CreateUpdateCollege} />
                 <Route path="/profile" component={Profile} />
+                <Route path="/topHeadlineNews" component={HeadingNews} />
                 <Route path="*" component={NotFound} />
             </Switch>
         </Suspense>

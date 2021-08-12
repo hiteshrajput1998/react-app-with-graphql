@@ -3,6 +3,7 @@ export const TRANSLATIONS_SWEDISH = {
     hr: "HR",
     dashboard: "instrumentbräda",
     createCLG: "Skapa college",
+    topHeading: "Top Headline News",
     setting: "Miljö",
     2021: "2021",
     error: {

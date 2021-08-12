@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
 
   content: {
     flexGrow: 1,
-    margin: theme.spacing(3),
-    marginTop: '10%'
+    margin: theme.spacing(1),
+    marginTop: '5%'
   }
 }));
 

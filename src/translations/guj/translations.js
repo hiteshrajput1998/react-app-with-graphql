@@ -3,6 +3,7 @@ export const TRANSLATIONS_GUJ = {
     hr: "એચઆર",
     dashboard: "ડેશબોર્ડ",
     createCLG: "કોલેજ ઉમેરો",
+    topHeading: "ટોચના મથાળા સમાચાર",
     setting: "સેટિંગ",
     2021: "૨૦૨૧",
     error: {
