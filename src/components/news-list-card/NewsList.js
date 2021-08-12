@@ -13,6 +13,10 @@ const useStyles = makeStyles((theme) => ({
 const NewsList = ({ news }) => {
     const classes = useStyles();
 
+    const handleDetails = (url) => {
+        window.open(url, '_blank');
+    };
+
     return (
         <>
             <Paper className={classes.paper}>
@@ -33,7 +37,7 @@ const NewsList = ({ news }) => {
                                 <Typography variant="body2" gutterBottom>
                                     {news.publishedAt.split('T')[0]} {news.publishedAt.split('T')[1]}
                                 </Typography>
-                                <Button>
+                                <Button onClick={() => handleDetails(news.url)}>
                                     <InfoIcon style={{ color: 'darkblue', marginLeft: '2%' }} />
                                 </Button>
                             </Grid>
