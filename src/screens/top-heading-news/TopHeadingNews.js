@@ -7,9 +7,8 @@ import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: '80%',
-        backgroundColor: 'lightgray',
-        marginLeft: '15%'
+        width: '85%',
+        marginLeft: '10%'
     },
     formControl: {
         margin: theme.spacing(1),
@@ -79,8 +78,8 @@ const TopHeadingNews = (props) => {
     return (
         <div className={classes.root}>
             <Grid container>
-                <Grid xs={12} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                    <Typography variant component="h1" style={{ color: 'transparent', textShadow: '2px 0px black'}}>Top Heading</Typography>
+                <Grid xs={12} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', marginLeft: '4%', border: '2px solid lightgray' }}>
+                    <Typography variant component="h1" style={{ textShadow: 'blue 1px 0px' }}>Top Heading</Typography>
                     <div>
                         <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel id="demo-simple-select-outlined-label">Country</InputLabel>
@@ -126,7 +125,7 @@ const TopHeadingNews = (props) => {
                         </FormControl>
                     </div>
                 </Grid>
-                <Grid xs={12} container style={{ height: '600px', overflowY: 'auto' }}>
+                <Grid xs={12} container style={{ height: '650px', overflowY: 'auto' }}>
                     {
                         newsList && newsList.length > 0 ? newsList.map((item) => (
                             <NewsList news={item} />
