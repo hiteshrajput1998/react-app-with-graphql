@@ -2,6 +2,7 @@ import { Grid, makeStyles, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast, ToastContainer } from "react-toastify";
+import { getCurrentLocationInfo } from '../../api/weather-api/WeatherAPI';
 import ForeCastData from '../../components/forecast-data/ForeCastData';
 import SearchBox from '../../components/searchabox/SearchBox';
 import { useWeatherForecastManager } from '../../hooks/weather-manager/WeatherManagerHooks';
@@ -27,6 +28,16 @@ function WeatherReport(props) {
     const [forecastData, setForecastData] = useState({});
 
     useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(function (position) {
+                getCurrentLocation(position.coords.latitude, position.coords.longitude);
+            });
+        } else {
+            toast.error('Geolocation is not supported by this browser.');
+        }
+    }, []);
+
+    useEffect(() => {
         if (foreCastDay?.networkError) {
             toast.error(t('error.network'));
         }
@@ -37,6 +48,12 @@ function WeatherReport(props) {
             toast.error(JSON.parse(foreCastDay?.graphQLErrors.map(x => x.message.body)[0])?.error?.message);
         }
     }, [foreCastDay]);
+
+    const getCurrentLocation = async (latitude, longitude) => {
+        let response = await getCurrentLocationInfo(latitude, longitude);
+        let localityTrim = (response.locality.split(' ')[0]).trim();
+        getWeatherForecastDay({ cityName: localityTrim, days: 1 });
+    };
 
     const handleSearchContent = (e) => {
         setForecastData({});
