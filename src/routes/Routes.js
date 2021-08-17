@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import LoginForm from "../components/forms/signin/LoginForm";
 import SignUpForm from '../components/forms/signup/SignUpForm';
 import NotFound from '../components/not-found/NotFound';
+import WeatherReport from '../screens/weather-report/WeatherReport';
 // import Profile from '../components/profile/Profile';
 
 const Dashboard = lazy(() => import('../components/dashboard/Dashboard'));
@@ -24,6 +25,7 @@ const Routes = () => {
                 <Route path='/updateCollege/:id' component={CreateUpdateCollege} />
                 <Route path="/profile" component={Profile} />
                 <Route path="/topHeadlineNews" component={HeadingNews} />
+                <Route path="/weatherReport" component={WeatherReport} />
                 <Route path="*" component={NotFound} />
             </Switch>
         </Suspense>

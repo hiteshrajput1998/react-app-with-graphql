@@ -5,6 +5,7 @@ export const TRANSLATIONS_GUJ = {
     createCLG: "કોલેજ ઉમેરો",
     topHeading: "ટોચના મથાળા સમાચાર",
     setting: "સેટિંગ",
+    weather: "આજે હવામાન",
     2021: "૨૦૨૧",
     error: {
         network: "નેટવર્ક ભૂલ!",

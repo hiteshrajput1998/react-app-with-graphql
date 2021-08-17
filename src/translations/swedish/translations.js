@@ -4,6 +4,7 @@ export const TRANSLATIONS_SWEDISH = {
     dashboard: "instrumentbräda",
     createCLG: "Skapa college",
     topHeading: "Top Headline News",
+    weather: "Vädret idag",
     setting: "Miljö",
     2021: "2021",
     error: {

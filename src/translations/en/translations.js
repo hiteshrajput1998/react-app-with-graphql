@@ -4,6 +4,7 @@ export const TRANSLATIONS_EN = {
     dashboard: "Dashboard",
     createCLG: "Create college",
     topHeading: "Top Headline News",
+    weather: "Today Weather",
     setting: "Setting",
     2021: "2021",
     error: {
