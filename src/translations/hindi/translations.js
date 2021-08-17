@@ -4,6 +4,7 @@ export const TRANSLATIONS_HIN = {
     dashboard: "डैशबोर्ड",
     createCLG: "कॉलेज बनाएं",
     topHeading: "शीर्ष शीर्षक समाचार",
+    weather: "आज का मौसम",
     setting: "स्थापना",
     2021: "२०२१",
     error: {
