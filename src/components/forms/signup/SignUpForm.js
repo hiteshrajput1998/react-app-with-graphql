@@ -247,7 +247,7 @@ const SignUpForm = (props) => {
                                     {
                                         errors.userName &&
                                         <Alert variant="outlined" severity="error">
-                                            {errors.userName} — check it out!
+                                            {errors.userName}
                                         </Alert>
                                     }
 
@@ -264,7 +264,7 @@ const SignUpForm = (props) => {
                                     {
                                         errors.email &&
                                         <Alert variant="outlined" severity="error">
-                                            {errors.email} — check it out!
+                                            {errors.email}
                                         </Alert>
                                     }
 
@@ -281,7 +281,7 @@ const SignUpForm = (props) => {
                                     {
                                         errors.firstName &&
                                         <Alert variant="outlined" severity="error">
-                                            {errors.firstName} — check it out!
+                                            {errors.firstName}
                                         </Alert>
                                     }
                                 </Grid>
@@ -297,7 +297,7 @@ const SignUpForm = (props) => {
                                     {
                                         errors.lastName &&
                                         <Alert variant="outlined" severity="error">
-                                            {errors.lastName} — check it out!
+                                            {errors.lastName}
                                         </Alert>
                                     }
 
@@ -315,7 +315,7 @@ const SignUpForm = (props) => {
                                     {
                                         errors.password &&
                                         <Alert variant="outlined" severity="error">
-                                            {errors.password} — check it out!
+                                            {errors.password}
                                         </Alert>
                                     }
                                 </Grid>
@@ -344,7 +344,7 @@ const SignUpForm = (props) => {
                                 {
                                     errors.zipCode &&
                                     <Alert variant="outlined" severity="error" style={{ marginLeft: '2%' }}>
-                                        {errors.zipCode} — check it out!
+                                        {errors.zipCode}
                                     </Alert>
                                 }
                                 {(data.address.city !== null) && (data.address.state !== undefined) ? (<Grid item xs={12}>
