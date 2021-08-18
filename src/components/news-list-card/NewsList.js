@@ -42,8 +42,8 @@ const NewsList = ({ news }) => {
                                 </Typography>
                                 <Tooltip title="Details" placement="right" arrow classes={{ tooltip: classes.toolTip }}>
                                     <Button onClick={() => handleDetails(news.url)}>
-                                    <InfoIcon style={{ color: 'darkblue', marginLeft: '2%' }} />
-                                </Button>
+                                        <InfoIcon style={{ color: 'darkblue', marginLeft: '2%' }} />
+                                    </Button>
                                 </Tooltip>
                         </Grid>
                     </Grid>
