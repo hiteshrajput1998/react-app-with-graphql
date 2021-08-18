@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Grid, Icon, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Box, Button, Grid, Icon, makeStyles, Paper, Tooltip, Typography } from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
 
 const useStyles = makeStyles((theme) => ({
@@ -8,6 +8,9 @@ const useStyles = makeStyles((theme) => ({
         margin: '0px 4% 10px 4%',
         minWidth: '92%',
     },
+    toolTip: {
+        fontSize: '12px'
+    }
 }));
 
 const NewsList = ({ news }) => {
@@ -37,17 +40,19 @@ const NewsList = ({ news }) => {
                                 <Typography variant="body2" gutterBottom>
                                     {news.publishedAt.split('T')[0]} {news.publishedAt.split('T')[1]}
                                 </Typography>
-                                <Button onClick={() => handleDetails(news.url)}>
+                                <Tooltip title="Details" placement="right" arrow classes={{ tooltip: classes.toolTip }}>
+                                    <Button onClick={() => handleDetails(news.url)}>
                                     <InfoIcon style={{ color: 'darkblue', marginLeft: '2%' }} />
                                 </Button>
-                            </Grid>
-                        </Grid>
-                        <Grid item style={{ marginLeft: '2%', marginTop: '1%' }}>
-                            <img className={classes.img} alt="complex" src={news.image} width="250" height="150" />
+                                </Tooltip>
                         </Grid>
                     </Grid>
+                    <Grid item style={{ marginLeft: '2%', marginTop: '1%' }}>
+                        <img className={classes.img} alt="complex" src={news.image} width="250" height="150" />
+                    </Grid>
                 </Grid>
-            </Paper>
+                </Grid>
+        </Paper>
         </>
     );
 };
