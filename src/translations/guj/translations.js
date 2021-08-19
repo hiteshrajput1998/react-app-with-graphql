@@ -6,6 +6,7 @@ export const TRANSLATIONS_GUJ = {
     topHeading: "ટોચના મથાળા સમાચાર",
     setting: "સેટિંગ",
     weather: "આજે હવામાન",
+    map: 'નકશો',
     2021: "૨૦૨૧",
     error: {
         network: "નેટવર્ક ભૂલ!",

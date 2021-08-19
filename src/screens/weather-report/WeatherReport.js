@@ -69,7 +69,7 @@ function WeatherReport(props) {
         <div className={classes.root}>
             <Grid container>
                 <Grid xs={12} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <SearchBox onChange={handleChangeSearchContent} onClick={handleSearchContent} />
+                    <SearchBox inputPlaceHolder="Enter city" onChange={handleChangeSearchContent} onClick={handleSearchContent} />
                 </Grid>
                 {forecastData && Object.keys(forecastData).length > 0 &&
                     <Grid xs={12} container style={{ marginTop: '5%' }}>

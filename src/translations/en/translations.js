@@ -5,6 +5,7 @@ export const TRANSLATIONS_EN = {
     createCLG: "Create college",
     topHeading: "Top Headline News",
     weather: "Today Weather",
+    map: 'Map',
     setting: "Setting",
     2021: "2021",
     error: {
