@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function SearchBox({ onClick, onChange }) {
+function SearchBox({ onClick, onChange, inputPlaceHolder }) {
     const classes = useStyles();
 
     return (
@@ -31,7 +31,7 @@ function SearchBox({ onClick, onChange }) {
             <Paper component="form" className={classes.root}>
                 <InputBase
                     className={classes.input}
-                    placeholder="Enter city"
+                    placeholder={inputPlaceHolder}
                     inputProps={{ 'aria-label': 'enter city' }}
                     onChange={onChange}
                 />

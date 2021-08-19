@@ -6,6 +6,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import RssFeedOutlinedIcon from '@material-ui/icons/RssFeedOutlined';
 import SettingsIcon from '@material-ui/icons/Settings';
 import CloudIcon from '@material-ui/icons/Cloud';
+import RoomIcon from '@material-ui/icons/Room';
 import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +40,10 @@ const LeftDrawer = (props) => {
             icon: <CloudIcon />
         },
         {
+            key: 'map',
+            icon: <RoomIcon />
+        },
+        {
             key: 'setting',
             icon: <SettingsIcon />
         }
@@ -59,6 +64,9 @@ const LeftDrawer = (props) => {
                 break;
             case 3:
                 history.push('/weatherReport');
+                break;
+            case 4:
+                history.push('/map');
                 break;
             default:
                 break;
