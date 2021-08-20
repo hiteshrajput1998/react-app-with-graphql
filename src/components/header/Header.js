@@ -1,7 +1,7 @@
 import React from 'react';
 import i18n from "i18next";
 import { useTranslation } from 'react-i18next';
-import { createHashHistory as createHistory } from 'history';
+import { useHistory } from "react-router-dom";
 import { AppBar, makeStyles, Toolbar, Typography, CssBaseline, Button, DRO, Select, MenuItem, ListItemIcon, ListItemText, InputLabel, FormControl } from '@material-ui/core';
 import GTranslateIcon from '@material-ui/icons/GTranslate';
 import LeftDrawer from '../drawer/LeftDrawer';
@@ -44,7 +44,7 @@ const Header = (props) => {
 
     const classes = useStyles();
     const { t } = useTranslation();
-    const history = createHistory();
+    let history = useHistory();
 
     const color = {
         color: 'white'
@@ -77,7 +77,7 @@ const Header = (props) => {
     };
 
     const handleLogin = () => {
-        history.push('login');
+        history.push('/login');
     };
 
     return (
