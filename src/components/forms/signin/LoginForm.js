@@ -2,10 +2,8 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Avatar, Button, Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid } from '@material-ui/core';
+import { Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect, useRef } from 'react';
 import CryptoJS from 'crypto-js';
 import { validateLoginForm, validateOTPForm } from '../../utils';
@@ -13,6 +11,7 @@ import { Login_RECORD } from '../../../api/forms/login/LoginMutations';
 import { ToastContainer, toast } from 'react-toastify';
 import { CHECK_VERYFY_OTP_SCHEMA } from '../../../api/user-api/UserQueries';
 import { RESEND_OTP_SCHEMA } from '../../../api/user-api/UserMutations';
+import GoogleLogin from 'react-google-login';
 
 
 
@@ -25,11 +24,10 @@ const useStyles = makeStyles(theme => ({
         height: "70vh"
     },
     container: {
-        // position: "absolute",
-        // top: "30%",
         backgroundColor: "rgb(242,243,244)",
         borderRadius: "10px",
-        padding: "20px"
+        padding: "20px",
+        margin: '0 0 0 10%'
     },
     paper: {
         height: 140,
@@ -213,72 +211,102 @@ const LoginForm = (props) => {
         // });
     };
 
+    const responseGoogle = (response) => {
+        console.log(response);
+    };
 
     return (
         <div className={classes.root}>
-            <Container className={classes.container} maxWidth="xs">
-                <Grid item className={classes.iconAdjust}>
+            <Grid container>
+                <Grid item xs={5} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end', color: '#394baf' }}>
+                    <div style={{ textAlign: 'center' }}>
+                        <Typography variant="outlined" component="h1">HR InfoLab</Typography>
+                        <span role="img" aria-label="smile" style={{ fontSize: '30px' }}>🙂</span>
+                    </div>
+                </Grid>
+                <Grid item xs={7}>
+                    <Container className={classes.container} maxWidth="xs">
+                        <Grid item xs={12} style={{ padding: '5% 0 5% 1%', color: '#394baf' }}>
+                            <Typography variant="outlined" component="h2" upper>Sign In</Typography>
+                        </Grid>
+                        { /*<Grid item className={classes.iconAdjust}>
                     <Avatar className={classes.iconAvatar}>
                         <FontAwesomeIcon icon={faUser} size="3x" />
                     </Avatar>
-                </Grid>
+                    </Grid> */}
 
-                <form >
-                    {
-                        errors.others
-                        &&
-                        <Alert variant="outlined" severity="error" style={{ marginBottom: "20px" }}>
-                            {errors.others}
-                        </Alert>
-                    }
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <Grid container spacing={2}>
+                        <form >
+                            {
+                                errors.others
+                                &&
+                                <Alert variant="outlined" severity="error" style={{ marginBottom: "20px" }}>
+                                    {errors.others}
+                                </Alert>
+                            }
+                            <Grid container spacing={3}>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="UserName"
-                                        name="userName"
-                                        size="small"
-                                        variant="outlined"
-                                        onChange={updateField}
-                                    />
-                                    {
-                                        errors.userName &&
-                                        <Alert variant="outlined" severity="error">
-                                            {errors.userName} — check it out!
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                fullWidth
+                                                label="UserName"
+                                                name="userName"
+                                                size="small"
+                                                variant="outlined"
+                                                onChange={updateField}
+                                            />
+                                            {
+                                                errors.userName &&
+                                                <Alert variant="outlined" severity="error">
+                                                    {errors.userName} — check it out!
                                         </Alert>
-                                    }
+                                            }
 
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <TextField
+                                                fullWidth
+                                                label="Password"
+                                                name="password"
+                                                size="small"
+                                                type="password"
+                                                variant="outlined"
+                                                onChange={updateField}
+                                            />
+                                            {
+                                                errors.password &&
+                                                <Alert variant="outlined" severity="error">
+                                                    {errors.password} — check it out!
+                                        </Alert>
+                                            }
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label="Password"
-                                        name="password"
-                                        size="small"
-                                        type="password"
-                                        variant="outlined"
-                                        onChange={updateField}
-                                    />
-                                    {
-                                        errors.password &&
-                                        <Alert variant="outlined" severity="error">
-                                            {errors.password} — check it out!
-                                        </Alert>
-                                    }
+                                    <Button color="secondary" fullWidth variant="contained" onClick={handleSubmit} style={{ backgroundColor: '#3f51b5' }}>
+                                        CONTINUE
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+
+                                    <GoogleLogin
+                                        clientId={`${process.env.REACT_APP_CLIENT_ID}`}
+                                        render={renderProps => (
+                                            <button onClick={renderProps.onClick} disabled={renderProps.disabled} class="loginBtn loginBtn--google">
+                                                Login with Google
+                                            </button>
+                                        )}
+                                        onSuccess={responseGoogle}
+                                        onFailure={responseGoogle}
+                                    >
+                                    </GoogleLogin>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button color="secondary" fullWidth variant="contained" onClick={handleSubmit}>
-                                Log in
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-                <ToastContainer autoClose={5000} />
-            </Container>
+                        </form>
+                        <ToastContainer autoClose={5000} />
+                    </Container>
+                </Grid>
+            </Grid>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -315,7 +343,7 @@ const LoginForm = (props) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </div >
     );
 }
 
