@@ -1,22 +1,18 @@
 import gql from 'graphql-tag';
+import { CORE_NEWS_FIELDS } from '../fragments/NewsFragments';
 
 export const GET_NEWS_SCHEMA = gql`
-query getNews($country: String, $lang: String){
+  ${CORE_NEWS_FIELDS}
+  query getNews($country: String, $lang: String){
     getNews(country: $country, lang: $lang){
       totalArticles
       articles{
-        title
-      description
-      content
-      url
-      image
-      publishedAt
-      source{
-        name
-        url
-      }
+        ...CoreNewsFields
+        source{
+          name
+          url
+        }
       }
     }
   }
-  
 `;
