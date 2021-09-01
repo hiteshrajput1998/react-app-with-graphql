@@ -12,6 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { CHECK_VERYFY_OTP_SCHEMA } from '../../../api/user-api/UserQueries';
 import { RESEND_OTP_SCHEMA } from '../../../api/user-api/UserMutations';
 import GoogleLogin from 'react-google-login';
+import { verifyOtp } from '../../../api/user-api/UserAPI';
 
 
 
@@ -93,20 +94,20 @@ const LoginForm = (props) => {
         }
     });
 
-    const [setResendOtp] = useMutation(RESEND_OTP_SCHEMA, {
-        onError: (error) => {
-            const { networkError, graphQLErrors } = error;
-            if (graphQLErrors) {
-                setErrors({ others: graphQLErrors.map(x => x.message)[0] })
-            }
+    // const [setResendOtp] = useMutation(RESEND_OTP_SCHEMA, {
+    //     onError: (error) => {
+    //         const { networkError, graphQLErrors } = error;
+    //         if (graphQLErrors) {
+    //             setErrors({ others: graphQLErrors.map(x => x.message)[0] })
+    //         }
 
-            if (networkError) {
-                console.log(networkError);
-                setErrors({ others: 'network error!' })
-            }
-            toast.error('Login failed!');
-        }
-    });
+    //         if (networkError) {
+    //             console.log(networkError);
+    //             setErrors({ others: 'network error!' })
+    //         }
+    //         toast.error('Login failed!');
+    //     }
+    // });
 
     // const [VerifyOTP] = useMutation(CHECK_VERYFY_OTP_SCHEMA, {
     //     onError: (error) => {
@@ -139,11 +140,11 @@ const LoginForm = (props) => {
         setErrors(validationErrors);
     }, [data])
 
-    useEffect(() => {
-        const validationErrors = validateOTPForm(otp);
-        console.log(validationErrors);
-        setErrors(validationErrors);
-    }, [otp])
+    // useEffect(() => {
+    //     const validationErrors = validateOTPForm(otp);
+    //     console.log(validationErrors);
+    //     setErrors(validationErrors);
+    // }, [otp])
 
     const updateField = async e => {
         e.preventDefault();
@@ -180,16 +181,23 @@ const LoginForm = (props) => {
     };
 
     const handleOTP = (e) => {
-        console.log(e.target.value);
-        setOtp(e.target.value)
+        const validationErrors = validateOTPForm(e.target.value);
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        } else {
+            setErrors({});
+        }
+        setOtp(e.target.value);
     };
 
     const handleResendOtp = () => {
-        setResendOtp({
-            variables: {
-                email: this.stat
-            }
-        })
+        // setResendOtp({
+        //     variables: {
+        //         email: this.stat
+        //     }
+        // })
     };
 
     const handleOTPVerification = () => {
@@ -203,6 +211,22 @@ const LoginForm = (props) => {
             return;
         }
 
+        verifyOtp({ otp, userName: data.userName }, res => {
+            const { networkError, graphQLErrors } = res;
+
+            if (graphQLErrors) {
+                toast.error(graphQLErrors.map(x => x.message)[0])
+            }
+            if (networkError) {
+                toast.error('networkError');
+            }
+            if (res?.data?.verifyOTP === 'Otp matched') {
+                toast.success('OTP matched');
+                setTimeout(() => {
+                    props.history.push('/dashboard');
+                }, 3000);
+            }
+        });
         // VerifyOTP({
         //     variables: {
         //         otp: otp,
