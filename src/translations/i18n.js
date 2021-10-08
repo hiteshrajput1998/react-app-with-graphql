@@ -31,4 +31,4 @@ i18n
         }
     });
 
-i18n.changeLanguage("en");
+i18n.changeLanguage(localStorage.getItem("language") || 'en');

@@ -34,6 +34,8 @@
     "react-dom": "^16.13.1",
     "react-google-login": "^5.2.2",
     "react-i18next": "^11.8.15",
+    "react-idle-timer": "^4.6.4",
+    "react-image-crop": "^9.0.4",
     "react-leaflet": "2.0.1",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
