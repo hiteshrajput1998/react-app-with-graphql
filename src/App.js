@@ -19,6 +19,8 @@ import { UserProfileContextProvider } from './hooks/user-manager/UserProfileMana
 import ErrorBoundary from './error-boundry/ErrorBoundry';
 import NetworkOffline from './components/check-network-status/NetworkOffline';
 import NetworkOnline from './components/check-network-status/NetworkOnline';
+import { IdleTimeContextProvider } from './hooks/idletime-manager/IdleTimeManagerContext';
+import SessionTimeout from './components/session-timeout/SessionTimeout';
 const useStyles = makeStyles((theme) => ({
 
   content: {
@@ -47,13 +49,15 @@ function App(props) {
 
   return (
     <>
-      <CollegeMainContextProvider>
-        <UserProfileContextProvider>
-          <ErrorBoundary>
-            <Header />
-            <LeftDrawer />
-            <main className={classes.content}>
-              {/*
+      <IdleTimeContextProvider>
+        <CollegeMainContextProvider>
+          <UserProfileContextProvider>
+            <ErrorBoundary>
+              <Header />
+              <LeftDrawer />
+              <main className={classes.content}>
+                {/*<SessionTimeout /> */}
+                {/*
           timer > 0 ? <Routes /> :
             <div style={{ marginLeft: "20%" }}>
               <Alert variant="filled" severity="error">
@@ -62,17 +66,18 @@ function App(props) {
             </div>
         
         */}
-              <Routes />
-            </main>
-            <SpeedDIal />
-            <div className="footer">
-              <Footer />
-              {showBackOnline && <NetworkOnline />}
-              {showOffline && <NetworkOffline />}
-            </div>
-          </ErrorBoundary>
-        </UserProfileContextProvider>
-      </CollegeMainContextProvider>
+                <Routes />
+              </main>
+              <SpeedDIal />
+              <div className="footer">
+                <Footer />
+                {showBackOnline && <NetworkOnline />}
+                {showOffline && <NetworkOffline />}
+              </div>
+            </ErrorBoundary>
+          </UserProfileContextProvider>
+        </CollegeMainContextProvider>
+      </IdleTimeContextProvider>
     </>
   );
 }

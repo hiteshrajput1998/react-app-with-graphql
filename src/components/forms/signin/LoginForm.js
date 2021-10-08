@@ -12,7 +12,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { CHECK_VERYFY_OTP_SCHEMA } from '../../../api/user-api/UserQueries';
 import { RESEND_OTP_SCHEMA } from '../../../api/user-api/UserMutations';
 import GoogleLogin from 'react-google-login';
-import { verifyOtp } from '../../../api/user-api/UserAPI';
+import { verifyOtp, resendOtp } from '../../../api/user-api/UserAPI';
+import { useIdleTimeContext } from '../../../hooks/idletime-manager/IdleTimeManagerContext';
 
 
 
@@ -55,6 +56,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LoginForm = (props) => {
+
+    const { handleAuth } = useIdleTimeContext();
 
     const firstRender = useRef(true)
     const classes = useStyles();
@@ -155,16 +158,15 @@ const LoginForm = (props) => {
     };
 
     const handleSubmit = () => {
-        console.log(data);
+        handleAuth();
+
         const validationErrors = validateLoginForm(data);
-        console.log(validationErrors);
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             return;
         }
         const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), process.env.REACT_APP_SECRET_KEY).toString();
-        console.log(encrypted);
         // const bytes = CryptoJS.AES.decrypt(encrypted, process.env.REACT_APP_SECRET_KEY);
         // console.log(`bytes: ${JSON.stringify(bytes)}`);
         // let data3 = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
@@ -192,7 +194,17 @@ const LoginForm = (props) => {
         setOtp(e.target.value);
     };
 
-    const handleResendOtp = () => {
+    const handleResendOtp = (userName) => {
+        resendOtp({ userName }, res => {
+            const { networkError, graphQLErrors } = res;
+
+            if (graphQLErrors) {
+                toast.error(graphQLErrors.map(x => x.message)[0])
+            }
+            if (networkError) {
+                toast.error('networkError');
+            }
+        })
         // setResendOtp({
         //     variables: {
         //         email: this.stat
@@ -201,10 +213,8 @@ const LoginForm = (props) => {
     };
 
     const handleOTPVerification = () => {
-        console.log(otp);
 
         const validationErrors = validateOTPForm(otp);
-        console.log(validationErrors);
 
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -359,7 +369,7 @@ const LoginForm = (props) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleResendOtp} color="primary">
+                    <Button onClick={() => handleResendOtp(this.state.userName)} color="primary">
                         Resend otp
                     </Button>
                     <Button onClick={handleOTPVerification} color="primary" autoFocus>

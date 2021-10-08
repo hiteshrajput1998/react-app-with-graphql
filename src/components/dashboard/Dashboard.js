@@ -17,6 +17,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { Edit, Delete } from '@material-ui/icons';
 import { DELETE_COLLEGES_BY_ID, DELETE_COLLEGES_BY_IDS_SCHEMA, DELETE_COLLEGE_SCHEMA } from '../../api/college-api/CollegeMutation';
 import { useCollegeContext } from '../../hooks/college-manager/CollegeManagerContext';
+import axios from 'axios';
 
 
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import i18n from "i18next";
 import { useTranslation } from 'react-i18next';
 import { useHistory } from "react-router-dom";
@@ -54,24 +54,31 @@ const Header = (props) => {
         console.log(e.target.value);
 
         let value = e.target.value;
+
         switch (value) {
             case "English":
                 i18n.changeLanguage("en");
+                localStorage.setItem("language", "en");
                 break;
             case "Gujarati":
                 i18n.changeLanguage("guj");
+                localStorage.setItem("language", "guj");
                 break;
             case "Hindi":
                 i18n.changeLanguage("hin");
+                localStorage.setItem("language", "hin");
                 break;
             case "Swedish":
                 i18n.changeLanguage("swedish");
+                localStorage.setItem("language", "swedish");
                 break;
             case "Japanese":
                 i18n.changeLanguage("jap");
+                localStorage.setItem("language", "jap");
                 break;
             default:
                 i18n.changeLanguage("en");
+                localStorage.setItem("language", "en");
                 break;
         }
     };

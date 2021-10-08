@@ -12,7 +12,7 @@ import { validateSignupForm } from '../../utils';
 import { Register_RECORD } from '../../../api/forms/register/RegisterMutations';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
-
+import CurrencyData from '../../../assests/reference-data/currency-data.json';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -85,6 +85,8 @@ const SignUpForm = (props) => {
         city: '',
         state: '',
     });
+
+    const currencyData = useState(CurrencyData[0]);
 
     const cache = useRef({});
 
@@ -216,6 +218,7 @@ const SignUpForm = (props) => {
         });
     }
 
+    console.log(currencyData);
     return (
         <div className={classes.root}>
             <Container className={classes.container} maxWidth="xs">
@@ -319,7 +322,7 @@ const SignUpForm = (props) => {
                                         </Alert>
                                     }
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={6}>
                                     <Autocomplete
                                         value={data.address.zipCode ?? ''}
                                         // onChange={(event, newValue) => {
@@ -339,6 +342,14 @@ const SignUpForm = (props) => {
                                         options={['380022']}
                                         style={{ width: 200 }}
                                         renderInput={(params) => <TextField {...params} label="Zipcode" variant="outlined" />}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Autocomplete
+                                        id="combo-box-demo"
+                                        options={currencyData && currencyData.length > 0 && currencyData}
+                                        getOptionLabel={(option) => option.name}
+                                        renderInput={(params) => <TextField {...params} label="Combo box" variant="outlined" />}
                                     />
                                 </Grid>
                                 {
